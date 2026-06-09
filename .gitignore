@@ -1,0 +1,12 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# Node / dočasné nástroje (např. dočasná konverze obrázků)
+node_modules/
+.webpconv/
+
+# Lokální / build
+.cache/
+dist/

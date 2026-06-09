@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="600" viewBox="0 0 480 600" role="img" aria-label="Placeholder fotky makléře">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E8FAFD"/>
+      <stop offset="1" stop-color="#D2F2F8"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="600" fill="url(#bg)"/>
+  <circle cx="240" cy="225" r="92" fill="#1CC1DD" opacity="0.85"/>
+  <path d="M90 540c0-95 67-160 150-160s150 65 150 160" fill="#1CC1DD" opacity="0.85"/>
+  <text x="240" y="585" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#0E8EA5">Fotka makléře</text>
+</svg>
