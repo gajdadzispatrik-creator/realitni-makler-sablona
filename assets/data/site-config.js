@@ -58,13 +58,13 @@ window.SITE_CONFIG = {
   hero: {
     localBadge: "Specialista na Ostravu a okolí",
     // \n = řízený zlom řádku (H1 má white-space: pre-line)
-    title: "Realitní makléř Ostrava:\nbezpečný prodej nemovitosti\nbez starostí",
+    title: "Realitní makléř Ostrava",
     subtitle:
       "Postarám se o nacenění, prezentaci, prohlídky i právní stránku obchodu. Od prvního setkání až po předání klíčů budete vědět, co se děje a proč.",
     // Tři konkrétní důvody důvěry (ne obecné fráze)
     reasons: [
+      "Profesionální prezentace",
       "Reálné nacenění podle lokality a aktuální poptávky",
-      "Profesionální prezentace, která pomáhá prodat",
       "Bezpečný obchod s právním servisem až do předání",
     ],
   },

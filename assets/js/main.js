@@ -202,13 +202,15 @@
     host.innerHTML = "";
 
     if (provider === "manual") {
-      // homepage zobrazuje `featured`; `all` je zásoba pro budoucí použití
-      var items = Array.isArray(rv.featured) ? rv.featured : (Array.isArray(rv.items) ? rv.items : []);
+      // carousel: featured (3 nej) + all (zásoba) → projíždí se přes tlačítko
+      var featured = Array.isArray(rv.featured) ? rv.featured : (Array.isArray(rv.items) ? rv.items : []);
+      var pool = Array.isArray(rv.all) ? rv.all : [];
+      var items = featured.concat(pool);
       if (!items.length) {
         host.appendChild(emptyReviews("Reference zatím připravujeme",
           "Spokojení klienti jsou pro nás prioritou. Reference doplníme brzy — mezitím se na nás neváhejte obrátit."));
       } else {
-        items.forEach(function (it) { host.appendChild(reviewCard(it)); });
+        buildReviewsCarousel(host, items);
       }
     } else if (provider === "google" || provider === "firmy") {
       // Žádné API klíče / scraping ve frontendu — jen místo pro oficiální widget.
@@ -262,6 +264,53 @@
     card.appendChild(text);
     card.appendChild(meta);
     return card;
+  }
+
+  // Carousel recenzí: vždy 3 viditelné, tlačítko posune o jednu kartu doleva,
+  // nová se objeví vpravo (nekonečně – první karta se po posunu přesune na konec).
+  function buildReviewsCarousel(host, items) {
+    host.classList.add("reviews--carousel");
+
+    var viewport = document.createElement("div");
+    viewport.className = "reviews__viewport";
+    var track = document.createElement("div");
+    track.className = "reviews__track";
+    items.forEach(function (it) { track.appendChild(reviewCard(it)); });
+    viewport.appendChild(track);
+    host.appendChild(viewport);
+
+    var nav = document.createElement("div");
+    nav.className = "reviews__nav";
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "reviews__next";
+    btn.setAttribute("aria-label", "Další recenze");
+    btn.innerHTML = "Další recenze <span class=\"reviews__next-arrow\" aria-hidden=\"true\">→</span>";
+    nav.appendChild(btn);
+    host.appendChild(nav);
+
+    var animating = false;
+    function stepPx() {
+      var first = track.firstElementChild;
+      if (!first) return 0;
+      var s = getComputedStyle(track);
+      var gap = parseFloat(s.columnGap || s.gap || "0") || 0;
+      return first.getBoundingClientRect().width + gap;
+    }
+    btn.addEventListener("click", function () {
+      if (animating || track.children.length < 2) return;
+      animating = true;
+      track.style.transition = "transform 0.45s ease";
+      track.style.transform = "translateX(" + (-stepPx()) + "px)";
+    });
+    track.addEventListener("transitionend", function (e) {
+      if (e.propertyName !== "transform") return;
+      track.style.transition = "none";
+      track.appendChild(track.firstElementChild); // první kartu na konec
+      track.style.transform = "translateX(0)";
+      void track.offsetWidth; // reflow, aby reset neanimoval
+      animating = false;
+    });
   }
 
   function emptyReviews(title, msg) {
@@ -518,6 +567,166 @@
     if (el) el.textContent = String(new Date().getFullYear());
   }
 
+  /* Služby jako taby (Prodej / Pronájem / Odhad ceny).
+     - klik na tab přepne panel + zapíše hash (#prodej…)
+     - klik na nav/CTA odkaz mířící na tab: scroll na sekci + aktivace tabu
+     - přímé načtení /#pronajem otevře správný tab
+     - aktivní tab se promítá do navigace, když je sekce ve výřezu
+     Bezpečné: bez JS zůstanou viditelné všechny panely (žádný se neskryje). */
+  function initServiceTabs() {
+    var KEYS = ["prodej", "pronajem", "odhad-ceny"];
+    var tablist = $(".svc__tabs");
+    var tabs = $all(".svc__tab");
+    var panels = $all(".svc__panel");
+    if (!tabs.length || !panels.length) return;
+    var section = document.getElementById("sluzby");
+    var navLinks = $all(".nav__link");
+    var servicesInView = false;
+
+    function currentKey() {
+      for (var i = 0; i < tabs.length; i++) {
+        if (tabs[i].getAttribute("aria-selected") === "true") return tabs[i].getAttribute("data-tab");
+      }
+      return KEYS[0];
+    }
+    function highlightNav(key) {
+      navLinks.forEach(function (l) {
+        var h = l.getAttribute("href") || "";
+        if (KEYS.indexOf(h.slice(1)) !== -1) l.classList.toggle("is-active", h === "#" + key);
+      });
+    }
+    function activate(key, focusTab) {
+      if (KEYS.indexOf(key) === -1) key = KEYS[0];
+      tabs.forEach(function (t) {
+        var on = t.getAttribute("data-tab") === key;
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        t.tabIndex = on ? 0 : -1;
+        if (on && focusTab) t.focus();
+      });
+      panels.forEach(function (p) { p.hidden = p.getAttribute("data-panel") !== key; });
+      if (servicesInView) highlightNav(key);
+    }
+    function setHash(key) {
+      if (history.replaceState) history.replaceState(null, "", "#" + key);
+    }
+
+    tabs.forEach(function (t) {
+      t.addEventListener("click", function () {
+        var key = t.getAttribute("data-tab");
+        activate(key);
+        setHash(key);
+      });
+    });
+
+    if (tablist) {
+      tablist.addEventListener("keydown", function (e) {
+        var idx = tabs.indexOf(document.activeElement);
+        if (idx === -1) return;
+        var ni = -1;
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") ni = (idx + 1) % tabs.length;
+        else if (e.key === "ArrowLeft" || e.key === "ArrowUp") ni = (idx - 1 + tabs.length) % tabs.length;
+        else if (e.key === "Home") ni = 0;
+        else if (e.key === "End") ni = tabs.length - 1;
+        if (ni !== -1) {
+          e.preventDefault();
+          var key = tabs[ni].getAttribute("data-tab");
+          activate(key, true);
+          setHash(key);
+        }
+      });
+    }
+
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var behavior = reduce ? "auto" : "smooth";
+    $all('a[href="#prodej"], a[href="#pronajem"], a[href="#odhad-ceny"]').forEach(function (link) {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        var key = link.getAttribute("href").slice(1);
+        activate(key);
+        if (section) section.scrollIntoView({ behavior: behavior, block: "start" });
+        setHash(key);
+      });
+    });
+
+    if (section && "IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          servicesInView = en.isIntersecting;
+          if (en.isIntersecting) highlightNav(currentKey());
+          else navLinks.forEach(function (l) {
+            if (KEYS.indexOf((l.getAttribute("href") || "").slice(1)) !== -1) l.classList.remove("is-active");
+          });
+        });
+      }, { rootMargin: "-45% 0px -50% 0px", threshold: 0 }).observe(section);
+    }
+
+    var initial = (location.hash || "").slice(1);
+    if (KEYS.indexOf(initial) !== -1) {
+      activate(initial);
+      if (section) requestAnimationFrame(function () { section.scrollIntoView({ block: "start" }); });
+    } else {
+      activate(KEYS[0]);
+    }
+  }
+
+  /* CTA u služeb předvyplní typ požadavku ve formuláři (a smooth-scroll řeší initSmoothNav). */
+  function initInquiryPrefill() {
+    var select = $("[data-inquiry-types]");
+    if (!select) return;
+    $all("a[data-inquiry]").forEach(function (link) {
+      link.addEventListener("click", function () {
+        var val = link.getAttribute("data-inquiry");
+        // nastav jen pokud taková volba existuje
+        var has = Array.prototype.some.call(select.options, function (o) { return o.value === val; });
+        if (has) {
+          select.value = val;
+          select.setAttribute("aria-invalid", "false");
+        }
+      });
+    });
+  }
+
+  /* Rozbalitelný „příběh" v sekci O mně — plynulá výška, bez knihovny.
+     Bez JS zůstane celý text viditelný (tlačítko je v HTML hidden). */
+  function initAboutStory() {
+    var btn = $(".about__reveal");
+    var story = document.getElementById("about-story");
+    if (!btn || !story) return;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var label = $(".about__reveal-label", btn);
+
+    // zapni JS chování: ukaž tlačítko a sbal příběh
+    btn.hidden = false;
+    btn.setAttribute("aria-expanded", "false");
+    story.style.height = "0px";
+
+    function expand() {
+      btn.setAttribute("aria-expanded", "true");
+      if (label) label.textContent = "Skrýt příběh";
+      if (reduce) { story.style.height = "auto"; return; }
+      story.style.height = story.scrollHeight + "px";
+      var done = function (e) {
+        if (e.target === story && e.propertyName === "height") {
+          story.style.height = "auto";
+          story.removeEventListener("transitionend", done);
+        }
+      };
+      story.addEventListener("transitionend", done);
+    }
+    function collapse() {
+      btn.setAttribute("aria-expanded", "false");
+      if (label) label.textContent = "Přečíst celý příběh";
+      if (reduce) { story.style.height = "0px"; return; }
+      story.style.height = story.scrollHeight + "px"; // z auto na px
+      void story.offsetHeight;                        // vynuť reflow
+      story.style.height = "0px";
+    }
+    btn.addEventListener("click", function () {
+      if (btn.getAttribute("aria-expanded") === "true") collapse();
+      else expand();
+    });
+  }
+
   /* ---------------------------------------------------------------------------
      INIT
      ------------------------------------------------------------------------ */
@@ -536,6 +745,9 @@
     initScrollSpy();
     initForm();
     initYear();
+    initServiceTabs();
+    initInquiryPrefill();
+    initAboutStory();
   }
 
   if (document.readyState === "loading") {
