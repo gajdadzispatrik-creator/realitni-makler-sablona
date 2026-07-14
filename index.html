@@ -144,10 +144,10 @@
   }
   </script>
 
-  <!-- Font: Montserrat (neblokuje render — display=swap) -->
+  <!-- Font: Montserrat (neblokuje render — display=swap) + Poppins pro cookie lištu -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" />
 
   <!-- Styl -->
   <link rel="stylesheet" href="assets/css/styles.css" />
@@ -162,15 +162,14 @@
   <header class="site-header" id="top">
     <div class="container header__inner">
       <a class="brand" href="#top" aria-label="Domů — Radim Vrána, realitní makléř">
-        <span class="brand__name" data-cfg="agent.name">Radim Vrána</span>
-        <span class="brand__role" data-cfg="agent.role">Realitní makléř · Ostrava</span>
+        <span class="brand__monogram" aria-hidden="true">RV</span>
       </a>
 
       <nav class="nav" id="primary-nav" aria-label="Hlavní navigace">
         <ul class="nav__list">
           <li><a class="nav__link" href="#hero">Úvod</a></li>
           <li><a class="nav__link" href="#sluzby">Služby</a></li>
-          <li><a class="nav__link" href="#reference">Reference</a></li>
+          <li><a class="nav__link" href="#reference">Recenze</a></li>
           <li><a class="nav__link" href="#o-mne">O mně</a></li>
           <li><a class="nav__link" href="#kontakt">Kontakt</a></li>
         </ul>
@@ -192,7 +191,7 @@
         <ul class="mobile-menu__list">
           <li><a class="mobile-menu__link" href="#hero">Úvod</a></li>
           <li><a class="mobile-menu__link" href="#sluzby">Služby</a></li>
-          <li><a class="mobile-menu__link" href="#reference">Reference</a></li>
+          <li><a class="mobile-menu__link" href="#reference">Recenze</a></li>
           <li><a class="mobile-menu__link" href="#o-mne">O mně</a></li>
           <li><a class="mobile-menu__link" href="#kontakt">Kontakt</a></li>
         </ul>
@@ -231,6 +230,10 @@
         <div class="hero__content">
           <h2 class="hero__name" data-cfg="agent.name">Radim Vrána</h2>
           <h1 class="hero__title" id="hero-title" data-cfg="hero.title">Realitní makléř Ostrava</h1>
+          <div class="om-rating hero__rating" aria-label="Hodnocení 5 z 5">
+            <span class="om-stars" aria-hidden="true">★★★★★</span>
+            <span class="om-rating-text"><strong>5,0 / 5</strong> · hodnocení klientů</span>
+          </div>
           <!-- Benefity místo podnadpisu (render z configu hero.reasons) -->
           <ul class="hero__reasons" data-reasons>
             <li>
@@ -248,11 +251,11 @@
           </ul>
 
           <div class="hero__cta">
-            <a class="btn btn--primary btn--lg" href="#kontakt" data-cfg="cta.primary">
-              Zjistit cenu nemovitosti
+            <a class="btn btn--primary btn--lg" href="#napiste" data-inquiry="Prodej nemovitosti" data-cfg="cta.secondary">
+              Chci prodat nemovitost
             </a>
-            <a class="btn btn--outline btn--lg" href="#prodej" data-cfg="cta.secondary">
-              Jak probíhá prodej
+            <a class="btn btn--outline btn--lg" href="#napiste" data-inquiry="Odhad ceny" data-cfg="cta.primary">
+              Zjistit cenu nemovitosti
             </a>
           </div>
         </div>
@@ -289,36 +292,146 @@
     </section>
 
     <!-- =======================================================================
-         SLUŽBY (placeholder karty)
+         SLUŽBY — 3 karty (Prodej / Pronájem / Odhad ceny)
          ==================================================================== -->
-    <section class="section" id="sluzby" aria-label="Služby">
+    <section class="section" id="sluzby" aria-labelledby="sluzby-title">
       <div class="container">
-        <!-- 3 grafické bloky s fotkou na pozadí a velkým nadpisem -->
-        <div class="svc-tiles">
-          <a class="svc-tile svc-tile--prodej" id="prodej" href="#napiste" data-inquiry="Prodej nemovitosti" aria-label="Prodej nemovitosti">
-            <span class="svc-tile__title">Prodej</span>          </a>
-          <a class="svc-tile svc-tile--pronajem" id="pronajem" href="#napiste" data-inquiry="Pronájem" aria-label="Pronájem">
-            <span class="svc-tile__title">Pronájem</span>          </a>
-          <a class="svc-tile svc-tile--odhad" id="odhad-ceny" href="#napiste" data-inquiry="Odhad ceny" aria-label="Odhad ceny">
-            <span class="svc-tile__title">Odhad ceny</span>          </a>
+        <header class="sluzby-head">
+          <p class="sluzby-kicker">Služby</p>
+          <h2 class="sluzby-title" id="sluzby-title">Jak vám mohu pomoci s nemovitostí</h2>
+          <p class="sluzby-lead">Vyberte, co aktuálně řešíte. O vše ostatní se postarám já.</p>
+        </header>
+
+        <div class="sluzby-grid">
+          <article class="sluzba-card">
+            <div class="sluzba-card__media">
+              <span class="sluzba-card__badge">Nejžádanější</span>
+              <img class="sluzba-card__img" src="assets/img/karta-prodej.webp" alt="Prodej nemovitosti" loading="lazy" width="640" height="440" />
+              <h3 class="sluzba-card__title">Prodej</h3>
+            </div>
+            <div class="sluzba-card__body">
+              <ul class="sluzba-card__list">
+                <li>Správné tržní nacenění</li>
+                <li>Profesionální prezentace</li>
+                <li>Kompletní právní servis</li>
+              </ul>
+              <a class="sluzba-card__cta" href="#napiste" data-inquiry="Prodej nemovitosti">Chci prodat nemovitost</a>
+            </div>
+          </article>
+
+          <article class="sluzba-card">
+            <div class="sluzba-card__media">
+              <img class="sluzba-card__img" src="assets/img/karta-pronajem.webp" alt="Pronájem nemovitosti" loading="lazy" width="640" height="440" />
+              <h3 class="sluzba-card__title">Pronájem</h3>
+            </div>
+            <div class="sluzba-card__body">
+              <ul class="sluzba-card__list">
+                <li>Prověření zájemců</li>
+                <li>Nájemní smlouva</li>
+                <li>Předání nemovitosti</li>
+              </ul>
+              <a class="sluzba-card__cta" href="#napiste" data-inquiry="Pronájem">Chci pronajmout</a>
+            </div>
+          </article>
+
+          <article class="sluzba-card">
+            <div class="sluzba-card__media">
+              <img class="sluzba-card__img" src="assets/img/karta-odhad.webp" alt="Odhad ceny nemovitosti" loading="lazy" width="640" height="440" />
+              <h3 class="sluzba-card__title">Odhad ceny</h3>
+            </div>
+            <div class="sluzba-card__body">
+              <ul class="sluzba-card__list">
+                <li>Analýza trhu</li>
+                <li>Srovnání s okolím</li>
+                <li>Doporučení ke zvýšení ceny</li>
+              </ul>
+              <a class="sluzba-card__cta" href="#napiste" data-inquiry="Odhad ceny">Chci znát cenu</a>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
     <!-- =======================================================================
+         AKTUÁLNÍ NABÍDKA — tmavá karta s vypíchnutou nemovitostí.
+         Foto: assets/img/nemovitost.png — pro výměnu stačí nahradit tenhle
+         soubor stejným názvem. Cena/popis a odkaz na web RK (href) jsou
+         zatím placeholder texty/URL, doplň reálné údaje přímo v HTML.
+         ==================================================================== -->
+    <section class="section" id="nabidka" aria-labelledby="nabidka-title">
+      <div class="container">
+        <div class="nabidka-card">
+          <div class="nabidka-card__media">
+            <span class="nabidka-card__badge">Rezervováno</span>
+            <div class="nabidka-card__price-box">
+              <p class="nabidka-card__price">4 000 000 Kč</p>
+              <p class="nabidka-card__desc">Prodej bytu 2+kk 63 m² s balkónem a zahradou</p>
+            </div>
+          </div>
+          <div class="nabidka-card__content">
+            <span class="nabidka-card__kicker">Aktuální nabídka</span>
+            <h2 class="nabidka-card__heading" id="nabidka-title">Prohlédněte si moji nabídku <span class="nabidka-card__heading-accent">nemovitostí</span></h2>
+            <p class="nabidka-card__lead">Kompletní seznam nemovitostí k prodeji a pronájmu najdete na webu naší realitní kanceláře.</p>
+            <a class="nabidka-card__cta" href="https://www.mintreality.cz/reality/vse/?hideFilter=1" target="_blank" rel="noopener">Zobrazit nabídku nemovitostí</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         MARQUEE — kroky procesu prodeje, nekonečně běžící tmavý pruh
+         ==================================================================== -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marq-mask">
+      <div class="marq-track">
+        <div class="marq-group">
+          <span class="marq-step">Maximální prodejní cena</span>
+          <span class="marq-arrow">•</span>
+          <span class="marq-step">Spolehliví nájemníci</span>
+          <span class="marq-arrow">•</span>
+          <span class="marq-step">Odhad zdarma</span>
+          <span class="marq-arrow">•</span>
+          <span class="marq-step">Profesionální prezentace</span>
+          <span class="marq-arrow">•</span>
+          <span class="marq-step">Moderní marketing</span>
+          <span class="marq-arrow">•</span>
+          <span class="marq-step">Bezpečný průběh</span>
+          <span class="marq-arrow">•</span>
+          <span class="marq-step">Kompletní právní servis</span>
+          <span class="marq-arrow">•</span>
+          <span class="marq-step">Osobní přístup</span>
+          <span class="marq-arrow">•</span>
+        </div>
+        <div class="marq-group" aria-hidden="true">
+          <span class="marq-step">Maximální prodejní cena</span>
+          <span class="marq-arrow">•</span>
+          <span class="marq-step">Spolehliví nájemníci</span>
+          <span class="marq-arrow">•</span>
+          <span class="marq-step">Odhad zdarma</span>
+          <span class="marq-arrow">•</span>
+          <span class="marq-step">Profesionální prezentace</span>
+          <span class="marq-arrow">•</span>
+          <span class="marq-step">Moderní marketing</span>
+          <span class="marq-arrow">•</span>
+          <span class="marq-step">Bezpečný průběh</span>
+          <span class="marq-arrow">•</span>
+          <span class="marq-step">Kompletní právní servis</span>
+          <span class="marq-arrow">•</span>
+          <span class="marq-step">Osobní přístup</span>
+          <span class="marq-arrow">•</span>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- =======================================================================
          REFERENCE / RECENZE — render z configu přes main.js
          ==================================================================== -->
     <section class="section" id="reference" aria-labelledby="reference-title">
-      <!-- Běžící pruh (marquee) v bílém pásu mezi Službami a Recenzemi -->
-      <div class="svc-marquee" aria-hidden="true">
-        <div class="svc-marquee__track">
-          <span class="svc-marquee__group">Nacenění nemovitosti&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prodejní strategie&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Příprava nemovitosti&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prezentace nemovitosti&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Profesionální fotografie&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inzerce&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Propagace nabídky&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prohlídky se zájemci&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vyjednání ceny&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prověření kupujícího&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rezervační smlouva&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Právní servis&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Advokátní úschova&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Převod na katastru&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Předání klíčů&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span class="svc-marquee__group">Nacenění nemovitosti&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prodejní strategie&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Příprava nemovitosti&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prezentace nemovitosti&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Profesionální fotografie&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inzerce&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Propagace nabídky&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prohlídky se zájemci&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vyjednání ceny&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prověření kupujícího&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rezervační smlouva&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Právní servis&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Advokátní úschova&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Převod na katastru&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Předání klíčů&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        </div>
-      </div>
       <div class="container">
         <div class="reviews-head">
           <header class="section__head">
+            <span class="reference-kicker">Recenze</span>
             <h2 class="section__title" id="reference-title">Důvěra, komunikace a výsledek</h2>
           </header>
 
@@ -352,7 +465,12 @@
         </div>
 
         <div class="about__head">
+          <span class="om-kicker">O MNĚ</span>
           <h2 class="section__title" id="o-mne-title"><span data-cfg="agent.name">Radim Vrána</span></h2>
+          <div class="om-rating" aria-label="Hodnocení 5 z 5">
+            <span class="om-stars" aria-hidden="true">★★★★★</span>
+            <span class="om-rating-text"><strong>5,0 / 5</strong> · hodnocení klientů</span>
+          </div>
           <p class="about__intro">Netvrdím, že jsem nejlepší makléř na trhu. Místo velkých slov raději nechávám mluvit práci, výsledky a spokojené klienty. Když mi svěříte svou nemovitost, beru to jako velkou zodpovědnost a udělám maximum pro to, aby prodej nebo pronájem proběhl co nejlépe.</p>
 
           <!-- Přepínač zobrazí JS (bez JS je celý příběh vidět); ovládá rozbalení -->
@@ -384,186 +502,307 @@
     </section>
 
     <!-- =======================================================================
-         FAQ (přístupný accordion — <details>/<summary>)
+         FAQ — dvousloupcová kompozice: vlevo (sticky) kicker/nadpis/perex/kontaktní
+         karta, vpravo akordeon (JS: initFaqAccordion v main.js — single-open,
+         max-height animace, aria-expanded/aria-controls).
          ==================================================================== -->
     <section class="section" id="faq" aria-labelledby="faq-title">
       <div class="container faq-layout">
-        <header class="section__head faq-head">
-          <h2 class="section__title" id="faq-title">Nejčastější dotazy</h2>
-        </header>
+        <div class="faq-col">
+          <span class="faq-kicker">FAQ</span>
+          <h2 class="faq-title" id="faq-title">Nejčastější dotazy</h2>
+          <p class="faq-lead">Odpovědi na to, co klienti řeší nejčastěji.</p>
 
-        <div class="faq">
-          <details class="faq__item" name="faq">
-            <summary class="faq__q">Kolik stojí služby makléře?</summary>
-            <div class="faq__a"><p>Odměna se vždy řeší podle typu nemovitosti a rozsahu služeb. Na první schůzce si řekneme, co přesně potřebujete, jaký postup dává smysl a jak bude odměna nastavená. Vše budete vědět předem.</p></div>
-          </details>
-          <details class="faq__item" name="faq">
-            <summary class="faq__q">Jak dlouho trvá prodej nemovitosti?</summary>
-            <div class="faq__a"><p>Záleží na typu nemovitosti, lokalitě, ceně a aktuální poptávce. U správně naceněné a dobře připravené nemovitosti může být zájem velmi rychlý. Důležité ale není jen prodat rychle, ale bezpečně a za rozumných podmínek.</p></div>
-          </details>
-          <details class="faq__item" name="faq">
-            <summary class="faq__q">Jak probíhá odhad ceny?</summary>
-            <div class="faq__a"><p>Podívám se na lokalitu, stav nemovitosti, dispozici, srovnatelné nabídky i reálnou poptávku. Cílem není cenu jen odhadnout od stolu, ale nastavit ji tak, aby dávala smysl pro trh i pro vás.</p></div>
-          </details>
-          <details class="faq__item" name="faq">
-            <summary class="faq__q">Musím něco platit předem?</summary>
-            <div class="faq__a"><p>To záleží na konkrétní domluvě a rozsahu služeb. Vše si řekneme předem, aby bylo jasné, co je součástí spolupráce a kdy se případně co hradí. Bez vašeho souhlasu se do ničeho nepouštíme.</p></div>
-          </details>
-          <details class="faq__item" name="faq">
-            <summary class="faq__q">Pomůžete i s právním servisem?</summary>
-            <div class="faq__a"><p>Ano. Součástí bezpečného obchodu je příprava smluv, advokátní úschova, podpisy, katastr i předání nemovitosti. Právní část řeším ve spolupráci s advokátní kanceláří.</p></div>
-          </details>
-          <details class="faq__item" name="faq">
-            <summary class="faq__q">Pomůžete s hypotékou kupujícího?</summary>
-            <div class="faq__a"><p>Ano, pokud je potřeba, umím pomoci i s návazností na financování. Díky tomu se dá lépe pohlídat, aby měl kupující reálnou možnost nemovitost doplatit a obchod zbytečně nestál.</p></div>
-          </details>
-          <details class="faq__item" name="faq">
-            <summary class="faq__q">Musím se rozhodnout hned na první schůzce?</summary>
-            <div class="faq__a"><p>Ne. První schůzka je hlavně o tom, abychom si prošli vaši situaci, možnosti a další postup. Rozhodnutí bude vždy na vás.</p></div>
-          </details>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- =======================================================================
-         KONTAKT + FORMULÁŘ (zatím bez backendu)
-         ==================================================================== -->
-    <section class="section section--faint" id="kontakt" aria-labelledby="kontakt-title">
-      <div class="container contact">
-        <div class="contact__info">
-          <h2 class="section__title" id="kontakt-title">Jsem tady pro vás<br>online i osobně</h2>
-          <p class="section__lead">
-            Nejčastěji pomáhám s bydlením v Ostravě, Frýdku-Místku, Havířově, Karviné, Opavě, Novém Jičíně a Třinci.
-          </p>
-
-          <ul class="contact__list">
-            <li class="contact__item">
-              <svg class="contact__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
-              <div class="contact__detail">
-                <span class="contact__label">Telefon</span>
-                <a class="contact__value" href="tel:+420722792287"
-                   data-cfg-href="agent.phoneTel" data-cfg="agent.phone">+420 722 792 287</a>
-              </div>
-            </li>
-            <li class="contact__item">
-              <svg class="contact__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-              <div class="contact__detail">
-                <span class="contact__label">E-mail</span>
-                <a class="contact__value" href="mailto:radim@mintreality.cz"
-                   data-cfg-href="agent.emailMailto" data-cfg="agent.email">radim@mintreality.cz</a>
-              </div>
-            </li>
-            <li class="contact__item">
-              <svg class="contact__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-              <div class="contact__detail">
-                <span class="contact__label">Kancelář</span>
-                <a class="contact__value" href="https://maps.google.com/?q=17.+listopadu+599/30,+Ostrava-Poruba,+708+00"
-                   target="_blank" rel="noopener noreferrer" data-cfg="office.address">17. listopadu 599/30, Ostrava-Poruba, 708 00</a>
-              </div>
-            </li>
-            <li class="contact__item">
-              <svg class="contact__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>
-              <div class="contact__detail">
-                <span class="contact__label">Působnost</span>
-                <span class="contact__value" data-cfg="agent.locality">Ostrava a okolí</span>
-              </div>
-            </li>
-          </ul>
-
-        </div>
-
-        <!-- Mapa jako doplněk (Google embed, bez API klíče). Adresu změníš v src za query. -->
-        <div class="contact__map-wrap">
-          <div class="contact__map-bar">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-            Kancelář MINT reality &amp; finance
+          <div class="faq-card">
+            <p class="faq-card__title">Nenašli jste odpověď?</p>
+            <p class="faq-card__text">Zavolejte, rád vám poradím.</p>
+            <a class="btn btn--primary" href="tel:+420722792287"
+               data-cfg-href="agent.phoneTel">Zavolat</a>
           </div>
-          <iframe class="contact__map" title="Mapa — 17. listopadu 599/30, Ostrava-Poruba"
-                  src="https://maps.google.com/maps?q=17.%20listopadu%20599%2F30%2C%20Ostrava-Poruba%2C%20708%2000&output=embed"
-                  loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq__item is-open">
+            <h3 class="faq__item-head">
+              <button class="faq__btn" type="button" aria-expanded="true" aria-controls="faq-a-1" id="faq-q-1">
+                <span class="faq__q">Kolik stojí služby makléře?</span>
+                <span class="faq__toggle" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="faq__panel" id="faq-a-1" role="region" aria-labelledby="faq-q-1">
+              <div class="faq__panel-inner">
+                <p>Odměna se vždy řeší podle typu nemovitosti a rozsahu služeb. Na první schůzce si řekneme, co přesně potřebujete, jaký postup dává smysl a jak bude odměna nastavená. Vše budete vědět předem.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq__item">
+            <h3 class="faq__item-head">
+              <button class="faq__btn" type="button" aria-expanded="false" aria-controls="faq-a-2" id="faq-q-2">
+                <span class="faq__q">Jak dlouho trvá prodej nemovitosti?</span>
+                <span class="faq__toggle" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="faq__panel" id="faq-a-2" role="region" aria-labelledby="faq-q-2">
+              <div class="faq__panel-inner">
+                <p>Záleží na typu nemovitosti, lokalitě, ceně a aktuální poptávce. U správně naceněné a dobře připravené nemovitosti může být zájem velmi rychlý. Důležité ale není jen prodat rychle, ale bezpečně a za rozumných podmínek.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq__item">
+            <h3 class="faq__item-head">
+              <button class="faq__btn" type="button" aria-expanded="false" aria-controls="faq-a-3" id="faq-q-3">
+                <span class="faq__q">Jak probíhá odhad ceny?</span>
+                <span class="faq__toggle" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="faq__panel" id="faq-a-3" role="region" aria-labelledby="faq-q-3">
+              <div class="faq__panel-inner">
+                <p>Podívám se na lokalitu, stav nemovitosti, dispozici, srovnatelné nabídky i reálnou poptávku. Cílem není cenu jen odhadnout od stolu, ale nastavit ji tak, aby dávala smysl pro trh i pro vás.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq__item">
+            <h3 class="faq__item-head">
+              <button class="faq__btn" type="button" aria-expanded="false" aria-controls="faq-a-4" id="faq-q-4">
+                <span class="faq__q">Musím něco platit předem?</span>
+                <span class="faq__toggle" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="faq__panel" id="faq-a-4" role="region" aria-labelledby="faq-q-4">
+              <div class="faq__panel-inner">
+                <p>To záleží na konkrétní domluvě a rozsahu služeb. Vše si řekneme předem, aby bylo jasné, co je součástí spolupráce a kdy se případně co hradí. Bez vašeho souhlasu se do ničeho nepouštíme.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq__item">
+            <h3 class="faq__item-head">
+              <button class="faq__btn" type="button" aria-expanded="false" aria-controls="faq-a-5" id="faq-q-5">
+                <span class="faq__q">Pomůžete i s právním servisem?</span>
+                <span class="faq__toggle" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="faq__panel" id="faq-a-5" role="region" aria-labelledby="faq-q-5">
+              <div class="faq__panel-inner">
+                <p>Ano. Součástí bezpečného obchodu je příprava smluv, advokátní úschova, podpisy, katastr i předání nemovitosti. Právní část řeším ve spolupráci s advokátní kanceláří.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq__item">
+            <h3 class="faq__item-head">
+              <button class="faq__btn" type="button" aria-expanded="false" aria-controls="faq-a-6" id="faq-q-6">
+                <span class="faq__q">Pomůžete s hypotékou kupujícího?</span>
+                <span class="faq__toggle" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="faq__panel" id="faq-a-6" role="region" aria-labelledby="faq-q-6">
+              <div class="faq__panel-inner">
+                <p>Ano, pokud je potřeba, umím pomoci i s návazností na financování. Díky tomu se dá lépe pohlídat, aby měl kupující reálnou možnost nemovitost doplatit a obchod zbytečně nestál.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq__item">
+            <h3 class="faq__item-head">
+              <button class="faq__btn" type="button" aria-expanded="false" aria-controls="faq-a-7" id="faq-q-7">
+                <span class="faq__q">Musím se rozhodnout hned na první schůzce?</span>
+                <span class="faq__toggle" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="faq__panel" id="faq-a-7" role="region" aria-labelledby="faq-q-7">
+              <div class="faq__panel-inner">
+                <p>Ne. První schůzka je hlavně o tom, abychom si prošli vaši situaci, možnosti a další postup. Rozhodnutí bude vždy na vás.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- =======================================================================
-         FORMULÁŘ / NEZÁVAZNÁ ZPRÁVA (samostatná leadová sekce)
+         NAPIŠTE MI — leadová karta: tyrkysový „vizitka" panel + formulář
          ==================================================================== -->
     <section class="section" id="napiste" aria-labelledby="napiste-title">
-      <div class="container form-section">
-        <div class="form-section__intro">
-          <h2 class="section__title" id="napiste-title">Napište mi, co řešíte</h2>
-          <p class="section__lead">
-            Stačí stručně popsat situaci. Ozvu se vám a navrhnu další krok podle toho, jestli řešíte prodej, koupi, pronájem nebo odhad ceny.
-          </p>
+      <div class="container">
+        <div class="lead-card">
+          <div class="lead-card__pitch">
+            <span class="lead-card__mark" aria-hidden="true">RV</span>
 
-          <aside class="process-box">
-            <h3 class="process-box__title">Co se stane po odeslání?</h3>
-            <ul class="process-box__list">
-              <li><svg class="process-box__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Ozvu se vám co nejdříve</li>
-              <li><svg class="process-box__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Nezávazně projdeme vaši situaci</li>
-              <li><svg class="process-box__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Řeknu vám, jaký postup dává smysl</li>
-              <li><svg class="process-box__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Bez tlaku a zbytečných závazků</li>
-            </ul>
-          </aside>
+            <div class="lead-card__content">
+              <div class="lead-card__agent">
+                <img class="lead-card__photo" src="assets/img/radim-vrana.webp" data-cfg-src="agent.photo"
+                     alt="Radim Vrána" data-cfg-alt="agent.photoAlt" width="60" height="60" loading="lazy" decoding="async" />
+                <div>
+                  <p class="lead-card__agent-name" data-cfg="agent.name">Radim Vrána</p>
+                  <p class="lead-card__agent-role" data-cfg="agent.role">Realitní makléř Ostrava</p>
+                  <p class="lead-card__rating">
+                    <span class="lead-card__stars" aria-hidden="true">★★★★★</span>
+                    <span data-cfg="reviews.rating.value">5,0</span> / <span data-cfg="reviews.rating.outOf">5</span> · <span data-cfg="reviews.rating.label">hodnocení klientů</span>
+                  </p>
+                </div>
+              </div>
+
+              <h2 class="lead-card__title" id="napiste-title">Napište mi, co řešíte</h2>
+              <p class="lead-card__text">Stačí stručně popsat situaci. Ozvu se vám a navrhnu další kroky, ať řešíte prodej, koupi, pronájem nebo odhad ceny.</p>
+
+              <ul class="lead-card__perks">
+                <li><span class="lead-card__check" aria-hidden="true">✓</span>Ozvu se vám co nejdříve</li>
+                <li><span class="lead-card__check" aria-hidden="true">✓</span>Nezávazně projdeme vaši situaci</li>
+                <li><span class="lead-card__check" aria-hidden="true">✓</span>Bez tlaku a zbytečných závazků</li>
+              </ul>
+
+              <div class="lead-card__divider"></div>
+
+              <p class="lead-card__call-label">Raději zavoláte?</p>
+              <a class="lead-card__phone" href="tel:+420722792287"
+                 data-cfg-href="agent.phoneTel" data-cfg="agent.phone">+420 722 792 287</a>
+            </div>
+          </div>
+
+          <div class="lead-card__form-wrap">
+            <!-- Formulář — bez backendu; main.js dělá základní validaci + honeypot -->
+            <form class="lead-form" id="contact-form" novalidate data-endpoint="" method="post" action="">
+              <div class="lead-form__row">
+                <label class="lead-form__label" id="f-sluzba-label">S čím vám můžu pomoci?</label>
+                <div class="lead-form__tiles" role="radiogroup" aria-labelledby="f-sluzba-label">
+                  <input class="lead-form__tile-input" type="radio" name="sluzba" id="f-sluzba-prodej" value="Prodej nemovitosti" checked />
+                  <label class="lead-form__tile" for="f-sluzba-prodej">Prodej</label>
+
+                  <input class="lead-form__tile-input" type="radio" name="sluzba" id="f-sluzba-pronajem" value="Pronájem" />
+                  <label class="lead-form__tile" for="f-sluzba-pronajem">Pronájem</label>
+
+                  <input class="lead-form__tile-input" type="radio" name="sluzba" id="f-sluzba-odhad" value="Odhad ceny" />
+                  <label class="lead-form__tile" for="f-sluzba-odhad">Odhad ceny</label>
+
+                  <input class="lead-form__tile-input" type="radio" name="sluzba" id="f-sluzba-jine" value="Jiné" />
+                  <label class="lead-form__tile" for="f-sluzba-jine">Jiné</label>
+                </div>
+              </div>
+
+              <div class="lead-form__row">
+                <label class="lead-form__label" for="f-name">Jméno a příjmení</label>
+                <input class="lead-form__input" id="f-name" name="name" type="text"
+                       autocomplete="name" placeholder="Vaše jméno" required aria-required="true" />
+                <span class="lead-form__error" data-error-for="name"></span>
+              </div>
+
+              <div class="lead-form__grid">
+                <div class="lead-form__row">
+                  <label class="lead-form__label" for="f-phone">Telefon</label>
+                  <input class="lead-form__input" id="f-phone" name="phone" type="tel"
+                         autocomplete="tel" inputmode="tel" placeholder="Pro rychlé spojení" />
+                  <span class="lead-form__error" data-error-for="phone"></span>
+                </div>
+                <div class="lead-form__row">
+                  <label class="lead-form__label" for="f-email">E-mail</label>
+                  <input class="lead-form__input" id="f-email" name="email" type="email"
+                         autocomplete="email" inputmode="email" placeholder="Pro odpověď" />
+                  <span class="lead-form__error" data-error-for="email"></span>
+                </div>
+              </div>
+
+              <div class="lead-form__row">
+                <label class="lead-form__label" for="f-message">Zpráva</label>
+                <textarea class="lead-form__input lead-form__textarea" id="f-message" name="message"
+                          rows="3" placeholder="Napište stručně, co řešíte…"></textarea>
+              </div>
+
+              <!-- Honeypot: skrytý přístupně (mimo viewport, aria-hidden, bez tabindexu) -->
+              <div class="lead-form__hp" aria-hidden="true">
+                <label for="f-company">Nevyplňujte toto pole</label>
+                <input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+              </div>
+
+              <div class="lead-form__row lead-form__row--check">
+                <input class="lead-form__checkbox" id="f-gdpr" name="gdpr" type="checkbox" required aria-required="true" />
+                <label class="lead-form__check-label" for="f-gdpr">
+                  Souhlasím se zpracováním osobních údajů za účelem vyřízení mé zprávy.
+                </label>
+                <span class="lead-form__error" data-error-for="gdpr"></span>
+              </div>
+
+              <button class="lead-form__submit" type="submit">Odeslat zprávu</button>
+              <p class="lead-form__note">Odpovídám obvykle do 24 hodin · nezávazně</p>
+            </form>
+
+            <div class="lead-form__success" data-form-success role="status" aria-live="polite" hidden>
+              <p>Děkuji, ozvu se vám co nejdříve.</p>
+            </div>
+          </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Formulář — bez backendu; main.js dělá základní validaci + honeypot -->
-        <form class="form" id="contact-form" novalidate data-endpoint="" method="post" action="">
-          <div class="form__row">
-            <label class="form__label" for="f-name">Jméno a příjmení</label>
-            <input class="form__input" id="f-name" name="name" type="text"
-                   autocomplete="name" placeholder="Vaše jméno" required />
-            <span class="form__error" data-error-for="name"></span>
-          </div>
-
-          <div class="form__grid">
-            <div class="form__row">
-              <label class="form__label" for="f-phone">Telefon</label>
-              <input class="form__input" id="f-phone" name="phone" type="tel"
-                     autocomplete="tel" inputmode="tel" placeholder="Telefon pro rychlé spojení" required />
-              <span class="form__error" data-error-for="phone"></span>
-            </div>
-            <div class="form__row">
-              <label class="form__label" for="f-email">E-mail</label>
-              <input class="form__input" id="f-email" name="email" type="email"
-                     autocomplete="email" inputmode="email" placeholder="E-mail pro odpověď" required />
-              <span class="form__error" data-error-for="email"></span>
+    <!-- =======================================================================
+         KONTAKT + MAPA — obsah nahoře (tyrkysový blok), pás mapy dole
+         ==================================================================== -->
+    <section class="section" id="kontakt" aria-labelledby="kontakt-title">
+      <div class="kontakt-card__top">
+        <div class="container">
+          <div class="kontakt-card__head">
+            <div class="kontakt-card__intro">
+              <span class="kontakt-card__kicker">Kontakt</span>
+              <h2 class="kontakt-card__heading" id="kontakt-title">Jsem tady pro vás <span class="kontakt-card__heading-dark">online i osobně</span></h2>
+              <p class="kontakt-card__lead">Nejčastěji pomáhám s bydlením v Ostravě, Frýdku-Místku, Havířově, Karviné, Opavě, Novém Jičíně a Třinci.</p>
             </div>
           </div>
 
-          <div class="form__row">
-            <label class="form__label" for="f-type">S čím vám můžu pomoct?</label>
-            <select class="form__input" id="f-type" name="type" data-inquiry-types>
-              <option value="">Vyberte…</option>
-            </select>
+          <div class="kontakt-card__tiles">
+            <div class="kontakt-card__tile">
+              <span class="kontakt-card__tile-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+              </span>
+              <div>
+                <span class="kontakt-card__tile-label">Telefon</span>
+                <a class="kontakt-card__tile-value" href="tel:+420722792287"
+                   data-cfg-href="agent.phoneTel" data-cfg="agent.phone">722 792 287</a>
+              </div>
+            </div>
+            <div class="kontakt-card__tile">
+              <span class="kontakt-card__tile-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+              </span>
+              <div>
+                <span class="kontakt-card__tile-label">E-mail</span>
+                <a class="kontakt-card__tile-value" href="mailto:radim@mintreality.cz"
+                   data-cfg-href="agent.emailMailto" data-cfg="agent.email">radim@mintreality.cz</a>
+              </div>
+            </div>
+            <div class="kontakt-card__tile">
+              <span class="kontakt-card__tile-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-7h6v7"/></svg>
+              </span>
+              <div>
+                <span class="kontakt-card__tile-label">Kancelář</span>
+                <span class="kontakt-card__tile-value kontakt-card__tile-value--nowrap">17. listopadu 599/30, Ostrava</span>
+              </div>
+            </div>
+            <div class="kontakt-card__tile">
+              <span class="kontakt-card__tile-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m14.5 9.5-2 5-5 2 2-5z"/></svg>
+              </span>
+              <div>
+                <span class="kontakt-card__tile-label">Působnost</span>
+                <span class="kontakt-card__tile-value">Ostrava a okolí</span>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
 
-          <div class="form__row">
-            <label class="form__label" for="f-message">Zpráva</label>
-            <textarea class="form__input form__textarea" id="f-message" name="message"
-                      rows="5" placeholder="Napište stručně, co řešíte — prodej, koupi, odhad ceny, pronájem nebo jen dotaz."></textarea>
-          </div>
+      <!-- Pás mapy (Google embed, bez API klíče), full-bleed. Adresu změníš v src za query.
+           Plovoucí karty jsou zarovnané na šířku .container (calc), ne k okraji obrazovky. -->
+      <div class="kontakt-card__map">
+        <iframe class="kontakt-card__iframe" title="Mapa – kancelář MINT reality &amp; finance"
+                src="https://maps.google.com/maps?q=17.%20listopadu%20599%2F30%2C%20Ostrava-Poruba%2C%20708%2000&z=15&output=embed"
+                loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
-          <!-- Honeypot: skrytý přístupně (mimo viewport, aria-hidden, bez tabindexu) -->
-          <div class="form__hp" aria-hidden="true">
-            <label for="f-company">Nevyplňujte toto pole</label>
-            <input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off" />
-          </div>
-
-          <div class="form__row form__row--check">
-            <input class="form__checkbox" id="f-gdpr" name="gdpr" type="checkbox" required />
-            <label class="form__check-label" for="f-gdpr">
-              Souhlasím se zpracováním osobních údajů za účelem vyřízení mé zprávy.
-            </label>
-            <span class="form__error" data-error-for="gdpr"></span>
-          </div>
-
-          <button class="btn btn--primary btn--lg btn--block" type="submit">Odeslat zprávu</button>
-
-          <!-- Místo pro úspěšné / chybové hlášky -->
-          <p class="form__status" data-form-status role="status" aria-live="polite" hidden></p>
-        </form>
+        <div class="kontakt-card__map-card">
+          <p class="kontakt-card__map-card-head">Kancelář MINT reality &amp; finance</p>
+          <p class="kontakt-card__map-card-line1">17. listopadu 599/30</p>
+          <p class="kontakt-card__map-card-line2">708 00 Ostrava-Poruba</p>
+          <a class="kontakt-card__map-route"
+             href="https://www.google.com/maps/dir/?api=1&destination=17.%20listopadu%20599%2F30%2C%20Ostrava-Poruba%2C%20708%2000"
+             target="_blank" rel="noopener noreferrer">Zobrazit trasu</a>
+        </div>
       </div>
     </section>
   </main>
@@ -572,61 +811,121 @@
        FOOTER
        ====================================================================== -->
   <footer class="site-footer">
-    <div class="container">
-      <div class="footer__grid">
-        <!-- 1) Logo + popis + sociální sítě -->
-        <div class="footer__col">
-          <img class="footer__logo" src="assets/img/logo.png" alt="Logo realitní kanceláře"
-               height="48" width="144" loading="lazy" data-cfg-src="office.logo" />
-        </div>
-
-        <!-- 2) Kontakt s ikonami -->
-        <div class="footer__col">
-          <h2 class="footer__heading">Kontakt</h2>
-          <ul class="footer__contact">
-            <li>
-              <svg class="footer__contact-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
-              <a href="tel:+420722792287" data-cfg-href="agent.phoneTel" data-cfg="agent.phone">+420 722 792 287</a>
-            </li>
-            <li>
-              <svg class="footer__contact-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-              <a href="mailto:radim@mintreality.cz" data-cfg-href="agent.emailMailto" data-cfg="agent.email">radim@mintreality.cz</a>
-            </li>
-            <li>
-              <svg class="footer__contact-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-              <a href="https://maps.google.com/?q=17.+listopadu+599/30,+Ostrava-Poruba,+708+00"
-                 target="_blank" rel="noopener noreferrer">17. listopadu 599/30,<br>Ostrava-Poruba</a>
-            </li>
-          </ul>
-        </div>
-
-        <!-- 3) Právní informace -->
-        <div class="footer__col">
-          <h2 class="footer__heading">Právní informace</h2>
-          <ul class="footer__links">
-            <li><a href="#">Ochrana osobních údajů</a></li>
-            <li><a href="#">Cookies</a></li>
-          </ul>
-        </div>
-
-        <!-- 4) Rychlé odkazy -->
-        <div class="footer__col">
-          <h2 class="footer__heading">Rychlé odkazy</h2>
-          <ul class="footer__links">
-            <li><a href="#hero">Úvod</a></li>
-            <li><a href="#sluzby">Služby</a></li>
-            <li><a href="#reference">Reference</a></li>
-            <li><a href="#o-mne">O mně</a></li>
-            <li><a href="#kontakt">Kontakt</a></li>
-          </ul>
-        </div>
+    <div class="footer__grid">
+      <!-- 1) Značka: jméno + claim + sociální sítě -->
+      <div class="footer__col footer__col--brand">
+        <p class="footer__name" data-cfg="agent.name">Radim Vrána</p>
+        <p class="footer__claim">Profesionální realitní služby v Ostravě.</p>
+        <ul class="footer__social" data-social aria-label="Sociální sítě"></ul>
       </div>
 
-      <div class="footer__bottom">
-        <p>&copy; <span data-year>2026</span> <span data-cfg="office.name">MINT reality & finance</span> | Všechna práva vyhrazena</p>
+      <!-- 2) Rychlé odkazy -->
+      <div class="footer__col">
+        <h2 class="footer__heading">Rychlé odkazy</h2>
+        <ul class="footer__links">
+          <li><a href="#hero">Úvod</a></li>
+          <li><a href="#sluzby">Služby</a></li>
+          <li><a href="#reference">Reference</a></li>
+          <li><a href="#o-mne">O mně</a></li>
+          <li><a href="#kontakt">Kontakt</a></li>
+        </ul>
+      </div>
+
+      <!-- 3) Právní info -->
+      <div class="footer__col">
+        <h2 class="footer__heading">Právní info</h2>
+        <ul class="footer__links">
+          <li><a href="#">Ochrana osobních údajů</a></li>
+          <li><a href="#">Cookies</a></li>
+          <li><a href="#" data-cookie-settings-reopen>Nastavení cookies</a></li>
+        </ul>
+      </div>
+
+      <!-- 4) Kontakt s ikonami -->
+      <div class="footer__col">
+        <h2 class="footer__heading">Kontakt</h2>
+        <ul class="footer__contact">
+          <li>
+            <svg class="footer__contact-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+            <a href="tel:+420722792287" data-cfg-href="agent.phoneTel" data-cfg="agent.phone">+420 722 792 287</a>
+          </li>
+          <li>
+            <svg class="footer__contact-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            <a href="mailto:radim@mintreality.cz" data-cfg-href="agent.emailMailto" data-cfg="agent.email">radim@mintreality.cz</a>
+          </li>
+          <li class="footer__contact-item--address">
+            <svg class="footer__contact-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-7h6v7"/></svg>
+            <a href="https://maps.google.com/?q=17.+listopadu+599/30,+Ostrava-Poruba,+708+00"
+               target="_blank" rel="noopener noreferrer">17. listopadu 599/30,<br>Ostrava-Poruba</a>
+          </li>
+        </ul>
       </div>
     </div>
+
+    <div class="footer__bottom">
+      <p>&copy; <span data-year>2026</span> <span data-cfg="office.name">MINT reality & finance</span> | Všechna práva vyhrazena</p>
+    </div>
   </footer>
+
+  <!-- =======================================================================
+       COOKIE CONSENT — lišta dole (první návštěva) + panel nastavení kategorií.
+       Ovládá assets/js/main.js (initCookieConsent). Volba se ukládá do
+       localStorage pod klíčem "cookieConsent" a lišta se pak už nezobrazuje;
+       znovu jde otevřít přes odkaz „Nastavení cookies" v patičce.
+       ==================================================================== -->
+  <div class="cookie-consent" id="cookie-consent" role="dialog" aria-label="Souhlas s používáním cookies" aria-hidden="true" hidden>
+    <div class="cookie-consent__left">
+      <div class="cookie-consent__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <circle cx="9.2" cy="9.8" r="1" fill="currentColor" stroke="none"/>
+          <circle cx="14.3" cy="8.8" r="1" fill="currentColor" stroke="none"/>
+          <circle cx="15" cy="13.8" r="1" fill="currentColor" stroke="none"/>
+          <circle cx="10" cy="15.3" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+      <p class="cookie-consent__text">
+        Používáme cookies pro správné fungování webu a analýzu návštěvnosti.
+        <a href="#" class="cookie-consent__link">Více informací</a>
+      </p>
+    </div>
+    <div class="cookie-consent__actions">
+      <button type="button" class="cookie-btn cookie-btn--outline" data-cookie-open-settings>Nastavení</button>
+      <button type="button" class="cookie-btn cookie-btn--solid" data-cookie-accept>Přijmout vše</button>
+    </div>
+  </div>
+
+  <div class="cookie-settings" id="cookie-settings" role="dialog" aria-label="Nastavení cookies" aria-hidden="true" hidden>
+    <div class="cookie-settings__backdrop" data-cookie-close-settings></div>
+    <div class="cookie-settings__panel">
+      <h2 class="cookie-settings__title">Nastavení cookies</h2>
+      <p class="cookie-settings__lead">Vyberte, které kategorie cookies chcete povolit. Nezbytné cookies nelze vypnout, bez nich by web nefungoval správně.</p>
+
+      <div class="cookie-settings__row">
+        <div class="cookie-settings__row-text">
+          <p class="cookie-settings__row-title">Nezbytné</p>
+          <p class="cookie-settings__row-desc">Nutné pro základní chod webu (např. zapamatování vaší volby). Vždy aktivní.</p>
+        </div>
+        <span class="cookie-toggle cookie-toggle--locked" aria-hidden="true"><span class="cookie-toggle__thumb"></span></span>
+      </div>
+
+      <div class="cookie-settings__row">
+        <div class="cookie-settings__row-text">
+          <p class="cookie-settings__row-title">Analytické</p>
+          <p class="cookie-settings__row-desc">Pomáhají nám pochopit, jak web používáte, a postupně ho vylepšovat.</p>
+        </div>
+        <label class="cookie-toggle">
+          <input type="checkbox" id="cookie-toggle-analytics" />
+          <span class="cookie-toggle__thumb"></span>
+        </label>
+      </div>
+
+      <div class="cookie-settings__actions">
+        <button type="button" class="cookie-btn cookie-btn--outline" data-cookie-close-settings>Zrušit</button>
+        <button type="button" class="cookie-btn cookie-btn--solid" data-cookie-save-settings>Uložit výběr</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Skripty: config musí být první, pak main.js -->
   <script src="assets/data/site-config.js"></script>

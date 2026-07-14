@@ -155,6 +155,12 @@
   function renderSocial() {
     var hosts = $all("[data-social]");
     if (!hosts.length || !cfg.social) return;
+    var icons = {
+      facebook: '<img src="assets/img/Facebook.png" alt="" loading="lazy" />',
+      instagram: '<img src="assets/img/instagram.png" alt="" loading="lazy" />',
+      linkedin:
+        '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="7.5" cy="7.2" r="1.6"/><rect x="6.2" y="10.3" width="2.6" height="8.2"/><path d="M11.6 10.3h2.5v1.2c.5-.8 1.4-1.4 2.7-1.4 2 0 3.2 1.3 3.2 3.9v4.5h-2.6v-4.1c0-1.1-.4-1.9-1.5-1.9-.8 0-1.3.5-1.5 1.1-.1.2-.1.5-.1.8v4.1h-2.6z"/></svg>',
+    };
     var labels = { facebook: "Facebook", instagram: "Instagram", linkedin: "LinkedIn" };
     hosts.forEach(function (host) {
       host.innerHTML = "";
@@ -164,23 +170,13 @@
         var li = document.createElement("li");
         var a = document.createElement("a");
         a.href = url;
-        a.textContent = labels[key];
+        a.setAttribute("aria-label", labels[key]);
+        a.innerHTML = icons[key];
         a.target = "_blank";
         a.rel = "noopener noreferrer";
         li.appendChild(a);
         host.appendChild(li);
       });
-    });
-  }
-
-  function renderInquiryTypes() {
-    var select = $("[data-inquiry-types]");
-    if (!select || !Array.isArray(cfg.inquiryTypes)) return;
-    cfg.inquiryTypes.forEach(function (t) {
-      var opt = document.createElement("option");
-      opt.value = t;
-      opt.textContent = t;
-      select.appendChild(opt);
     });
   }
 
@@ -281,13 +277,24 @@
 
     var nav = document.createElement("div");
     nav.className = "reviews__nav";
-    var btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "reviews__next";
-    btn.setAttribute("aria-label", "Další recenze");
-    btn.innerHTML = "Další recenze <span class=\"reviews__next-arrow\" aria-hidden=\"true\">→</span>";
-    nav.appendChild(btn);
+    var prevBtn = document.createElement("button");
+    prevBtn.type = "button";
+    prevBtn.className = "reviews__arrow reviews__arrow--prev";
+    prevBtn.setAttribute("aria-label", "Předchozí recenze");
+    prevBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
+    var nextBtn = document.createElement("button");
+    nextBtn.type = "button";
+    nextBtn.className = "reviews__arrow reviews__arrow--next";
+    nextBtn.setAttribute("aria-label", "Další recenze");
+    nextBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+    nav.appendChild(prevBtn);
+    nav.appendChild(nextBtn);
     host.appendChild(nav);
+
+    if (track.children.length < 2) {
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+    }
 
     var animating = false;
     function stepPx() {
@@ -297,19 +304,44 @@
       var gap = parseFloat(s.columnGap || s.gap || "0") || 0;
       return first.getBoundingClientRect().width + gap;
     }
-    btn.addEventListener("click", function () {
+    // transitionend-failsafe: na zaseklém/throttlovaném rendereru se transitionend
+    // nemusí spustit — setTimeout jako pojistka dokončí přeskládání karet i tak.
+    function finishSlide() {
+      if (!animating) return;
+      track.style.transition = "none";
+      if (track.dataset.dir === "prev") {
+        delete track.dataset.dir;
+      } else {
+        track.appendChild(track.firstElementChild); // první kartu na konec
+      }
+      track.style.transform = "translateX(0)";
+      void track.offsetWidth; // reflow, aby reset neanimoval
+      animating = false;
+    }
+    nextBtn.addEventListener("click", function () {
       if (animating || track.children.length < 2) return;
       animating = true;
       track.style.transition = "transform 0.45s ease";
       track.style.transform = "translateX(" + (-stepPx()) + "px)";
+      window.setTimeout(finishSlide, 500);
+    });
+    prevBtn.addEventListener("click", function () {
+      if (animating || track.children.length < 2) return;
+      animating = true;
+      track.dataset.dir = "prev";
+      var last = track.lastElementChild;
+      track.style.transition = "none";
+      track.insertBefore(last, track.firstElementChild); // poslední kartu dopředu
+      var w = stepPx();
+      track.style.transform = "translateX(" + (-w) + "px)"; // stejný vizuální stav jako předtím
+      void track.offsetWidth; // reflow, aby se posun neanimoval
+      track.style.transition = "transform 0.45s ease";
+      track.style.transform = "translateX(0)"; // odjede doprava, odhalí přidanou kartu
+      window.setTimeout(finishSlide, 500);
     });
     track.addEventListener("transitionend", function (e) {
       if (e.propertyName !== "transform") return;
-      track.style.transition = "none";
-      track.appendChild(track.firstElementChild); // první kartu na konec
-      track.style.transform = "translateX(0)";
-      void track.offsetWidth; // reflow, aby reset neanimoval
-      animating = false;
+      finishSlide();
     });
   }
 
@@ -359,12 +391,13 @@
     set("[data-rating-value]", r.value);
     set("[data-rating-out]", r.outOf);
     set("[data-rating-label]", r.label);
-    // Zdroje v rating boxu jako klikací odkazy (skryjí se, když není URL)
+    // Zdroje jako klikací odkazy (skryjí se, když není URL) — napříč celou
+    // stránkou, ať to sdílí rating box i patička.
     function srcLink(sel, url) {
-      var el = $(sel, box);
-      if (!el) return;
-      if (url && url !== "#") { el.href = url; }
-      else { el.removeAttribute("href"); }
+      $all(sel).forEach(function (el) {
+        if (url && url !== "#") { el.href = url; }
+        else { el.removeAttribute("href"); }
+      });
     }
     srcLink("[data-rating-google]", rv.googleUrl);
     srcLink("[data-rating-firmy]", rv.firmyUrl);
@@ -480,7 +513,7 @@
     var form = $("#contact-form");
     if (!form) return;
 
-    var status = $("[data-form-status]", form);
+    var success = $("[data-form-success]");
 
     function setError(name, msg) {
       var field = form.elements[name];
@@ -502,25 +535,29 @@
       setError("name", name ? "" : "Vyplňte prosím jméno.");
       if (!name) ok = false;
 
-      if (!phone) { setError("phone", "Vyplňte telefon."); ok = false; }
-      else if (!validPhone(phone)) { setError("phone", "Zadejte platné telefonní číslo."); ok = false; }
-      else setError("phone", "");
+      // Stačí telefon NEBO e-mail — aspoň jedno z obou.
+      if (!phone && !email) {
+        setError("phone", "Vyplňte telefon nebo e-mail.");
+        setError("email", "");
+        ok = false;
+      } else {
+        var phoneBad = phone && !validPhone(phone);
+        var emailBad = email && !validEmail(email);
+        setError("phone", phoneBad ? "Zadejte platné telefonní číslo." : "");
+        setError("email", emailBad ? "Zadejte platný e-mail." : "");
+        if (phoneBad || emailBad) ok = false;
+      }
 
-      if (!email) { setError("email", "Vyplňte e-mail."); ok = false; }
-      else if (!validEmail(email)) { setError("email", "Zadejte platný e-mail."); ok = false; }
-      else setError("email", "");
-
-      setError("gdpr", gdpr ? "" : "Bez souhlasu nelze poptávku odeslat.");
+      setError("gdpr", gdpr ? "" : "Bez souhlasu nelze zprávu odeslat.");
       if (!gdpr) ok = false;
 
       return ok;
     }
 
-    function showStatus(state, msg) {
-      if (!status) return;
-      status.hidden = false;
-      status.setAttribute("data-state", state);
-      status.textContent = msg;
+    function showSuccess() {
+      if (!success) return;
+      form.hidden = true;
+      success.hidden = false;
     }
 
     form.addEventListener("submit", function (e) {
@@ -528,12 +565,11 @@
 
       // Honeypot: když je vyplněný, tváříme se jako úspěch a nic neodesíláme.
       if (form.elements.company && form.elements.company.value) {
-        showStatus("success", "Děkujeme, ozveme se vám.");
+        showSuccess();
         return;
       }
 
       if (!validate()) {
-        showStatus("error", "Zkontrolujte prosím zvýrazněná pole.");
         var firstInvalid = $('[aria-invalid="true"]', form);
         if (firstInvalid) firstInvalid.focus();
         return;
@@ -548,11 +584,11 @@
       // Žádné API klíče ve frontendu!
       // --------------------------------------------------------------------
 
-      showStatus("success", "Děkujeme za poptávku. Formulář zatím není napojený na server — propojení doplníme.");
+      showSuccess();
     });
 
     // Vyčisti chybu při psaní
-    $all("input, select, textarea", form).forEach(function (el) {
+    $all("input, textarea", form).forEach(function (el) {
       el.addEventListener("input", function () {
         if (el.name) setError(el.name, "");
       });
@@ -669,19 +705,16 @@
     }
   }
 
-  /* CTA u služeb předvyplní typ požadavku ve formuláři (a smooth-scroll řeší initSmoothNav). */
+  /* CTA u služeb předvyplní vybranou dlaždici v poli „S čím vám můžu pomoct?"
+     (a smooth-scroll řeší initSmoothNav). */
   function initInquiryPrefill() {
-    var select = $("[data-inquiry-types]");
-    if (!select) return;
+    var radios = $all('input[name="sluzba"]');
+    if (!radios.length) return;
     $all("a[data-inquiry]").forEach(function (link) {
       link.addEventListener("click", function () {
         var val = link.getAttribute("data-inquiry");
-        // nastav jen pokud taková volba existuje
-        var has = Array.prototype.some.call(select.options, function (o) { return o.value === val; });
-        if (has) {
-          select.value = val;
-          select.setAttribute("aria-invalid", "false");
-        }
+        var match = radios.filter(function (r) { return r.value === val; })[0];
+        if (match) match.checked = true;
       });
     });
   }
@@ -727,6 +760,176 @@
     });
   }
 
+  /* FAQ akordeon (pravý sloupec sekce #faq) — single-open, max-height animace,
+     aria-expanded/aria-controls; první položka je staticky otevřená (progressive
+     enhancement — viz .faq__item.is-open v CSS). */
+  function initFaqAccordion() {
+    var items = $all(".faq__item");
+    if (!items.length) return;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function openItem(item) {
+      var btn = $(".faq__btn", item);
+      var panel = $(".faq__panel", item);
+      item.classList.add("is-open");
+      btn.setAttribute("aria-expanded", "true");
+      if (reduce) { panel.style.maxHeight = "none"; return; }
+      panel.style.maxHeight = panel.scrollHeight + "px";
+      var done = function (e) {
+        if (e.target === panel && e.propertyName === "max-height") {
+          if (item.classList.contains("is-open")) panel.style.maxHeight = "none";
+          panel.removeEventListener("transitionend", done);
+        }
+      };
+      panel.addEventListener("transitionend", done);
+    }
+
+    function closeItem(item) {
+      var btn = $(".faq__btn", item);
+      var panel = $(".faq__panel", item);
+      // z "none" na konkrétní px, aby šlo zavření plynule animovat
+      panel.style.maxHeight = panel.scrollHeight + "px";
+      void panel.offsetHeight; // vynuť reflow
+      item.classList.remove("is-open");
+      btn.setAttribute("aria-expanded", "false");
+      panel.style.maxHeight = "0px";
+    }
+
+    items.forEach(function (item) {
+      var btn = $(".faq__btn", item);
+      var panel = $(".faq__panel", item);
+      if (item.classList.contains("is-open")) {
+        panel.style.maxHeight = reduce ? "none" : panel.scrollHeight + "px";
+      }
+      btn.addEventListener("click", function () {
+        if (item.classList.contains("is-open")) {
+          closeItem(item);
+          return;
+        }
+        items.forEach(function (other) {
+          if (other !== item && other.classList.contains("is-open")) closeItem(other);
+        });
+        openItem(item);
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------------------------
+     Cookie consent — lišta dole (první návštěva) + panel nastavení kategorií.
+     Volba se ukládá do localStorage["cookieConsent"] = {necessary, analytics}.
+     Nezobrazí se znovu, dokud uživatel volbu neresetuje (mazání localStorage)
+     nebo dokud ji sám nezmění přes odkaz „Nastavení cookies" v patičce.
+     ------------------------------------------------------------------------ */
+  function initCookieConsent() {
+    var STORAGE_KEY = "cookieConsent";
+    var bar = document.getElementById("cookie-consent");
+    var panel = document.getElementById("cookie-settings");
+    if (!bar || !panel) return;
+
+    var analyticsToggle = document.getElementById("cookie-toggle-analytics");
+    var HIDE_DELAY = 320;
+
+    function readConsent() {
+      try {
+        var raw = window.localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+    function saveConsent(consent) {
+      try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(consent)); } catch (e) {}
+    }
+    function applyConsent(consent) {
+      // Místo pro budoucí načtení analytiky (GA4 apod.) při consent.analytics === true.
+      document.documentElement.setAttribute("data-analytics-consent", consent && consent.analytics ? "granted" : "denied");
+    }
+
+    // rAF-failsafe: na zaseklém/throttlovaném rendereru se requestAnimationFrame
+    // nemusí spustit — setTimeout jako pojistka zajistí, že obsah nezůstane navždy skrytý.
+    function revealWithTransition(el) {
+      var applied = false;
+      function apply() {
+        if (applied) return;
+        applied = true;
+        el.classList.add("is-visible");
+        el.setAttribute("aria-hidden", "false");
+      }
+      requestAnimationFrame(apply);
+      window.setTimeout(apply, 60);
+    }
+
+    function showBar() {
+      bar.hidden = false;
+      revealWithTransition(bar);
+    }
+    function hideBar() {
+      bar.classList.remove("is-visible");
+      bar.setAttribute("aria-hidden", "true");
+      window.setTimeout(function () { bar.hidden = true; }, HIDE_DELAY);
+    }
+    function showSettings() {
+      var current = readConsent();
+      // Bez uloženého souhlasu ukaž oba přepínače jako zapnuté (Nezbytné je vždy
+      // zamčené zapnuté) — uživatel je pak může explicitně vypnout a uložit.
+      if (analyticsToggle) analyticsToggle.checked = current ? !!current.analytics : true;
+      panel.hidden = false;
+      revealWithTransition(panel);
+      var focusTarget = $(".cookie-settings__panel .cookie-btn, .cookie-settings__panel input:not([disabled])", panel);
+      if (focusTarget) focusTarget.focus();
+    }
+    function hideSettings() {
+      panel.classList.remove("is-visible");
+      panel.setAttribute("aria-hidden", "true");
+      window.setTimeout(function () { panel.hidden = true; }, HIDE_DELAY);
+    }
+
+    var existing = readConsent();
+    if (existing) applyConsent(existing); else showBar();
+
+    var openSettingsBtn = $("[data-cookie-open-settings]", bar);
+    var acceptBtn = $("[data-cookie-accept]", bar);
+    var closeSettingsEls = $all("[data-cookie-close-settings]", panel);
+    var saveSettingsBtn = $("[data-cookie-save-settings]", panel);
+
+    if (acceptBtn) acceptBtn.addEventListener("click", function () {
+      var consent = { necessary: true, analytics: true };
+      saveConsent(consent);
+      applyConsent(consent);
+      hideBar();
+    });
+    if (openSettingsBtn) openSettingsBtn.addEventListener("click", function () {
+      hideBar();
+      showSettings();
+    });
+    closeSettingsEls.forEach(function (el) {
+      el.addEventListener("click", function () {
+        hideSettings();
+        if (!readConsent()) showBar();
+      });
+    });
+    if (saveSettingsBtn) saveSettingsBtn.addEventListener("click", function () {
+      var consent = { necessary: true, analytics: !!(analyticsToggle && analyticsToggle.checked) };
+      saveConsent(consent);
+      applyConsent(consent);
+      hideSettings();
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && panel.classList.contains("is-visible")) {
+        hideSettings();
+        if (!readConsent()) showBar();
+      }
+    });
+
+    $all("[data-cookie-settings-reopen]").forEach(function (link) {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        showSettings();
+      });
+    });
+  }
+
   /* ---------------------------------------------------------------------------
      INIT
      ------------------------------------------------------------------------ */
@@ -736,7 +939,6 @@
     renderStats();
     animateStats();
     renderSocial();
-    renderInquiryTypes();
     renderReviews();
     renderRating();
     applyBindings(); // až po renderech, ať přepíše i vygenerovaný obsah
@@ -748,6 +950,8 @@
     initServiceTabs();
     initInquiryPrefill();
     initAboutStory();
+    initFaqAccordion();
+    initCookieConsent();
   }
 
   if (document.readyState === "loading") {

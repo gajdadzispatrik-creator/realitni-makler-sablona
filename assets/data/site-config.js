@@ -20,7 +20,7 @@ window.SITE_CONFIG = {
   agent: {
     name: "Radim Vrána",
     position: "Realitní makléř pro Ostravu a okolí", // podpis v hero kartě
-    role: "Realitní makléř · Ostrava",             // drobný řádek v hlavičce
+    role: "Realitní makléř Ostrava",                // drobný řádek v hlavičce
     locality: "Ostrava a okolí",
     phone: "+420 722 792 287",        // zobrazená podoba
     phoneHref: "+420722792287",       // tel: odkaz bez mezer
@@ -46,7 +46,7 @@ window.SITE_CONFIG = {
   /* --- CTA texty ---------------------------------------------------------- */
   cta: {
     primary: "Zjistit cenu nemovitosti",
-    secondary: "Jak probíhá prodej",
+    secondary: "Chci prodat nemovitost",
   },
 
   /* --- Footer ------------------------------------------------------------- */
@@ -81,8 +81,8 @@ window.SITE_CONFIG = {
   /* --- Sociální sítě ------------------------------------------------------ */
   /* Prázdný řetězec = odkaz se nezobrazí. */
   social: {
-    facebook: "",
-    instagram: "",
+    facebook: "#", // TODO: nahraď skutečným odkazem na Facebook profil/stránku
+    instagram: "#", // TODO: nahraď skutečným odkazem na Instagram profil
     linkedin: "",
   },
 
