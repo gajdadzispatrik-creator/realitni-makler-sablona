@@ -1953,8 +1953,8 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
 #napiste::before {
   content: "";
   position: absolute;
-  top: -44px; left: 0;
-  width: 100%; height: 44px;
+  top: -46px; left: 0;
+  width: 100%; height: 46px;
   background: #eef3f5;
   clip-path: polygon(0 0, 0 100%, 100% 100%);
   z-index: 0;
@@ -1963,7 +1963,7 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
 #napiste .container { position: relative; z-index: 1; padding-inline: 0; max-width: 1180px; }
 @media (max-width: 900px) {
   #napiste { padding: 40px 16px; }
-  #napiste::before { top: -28px; height: 28px; }
+  #napiste::before { top: -30px; height: 30px; }
 }
 .lead-card {
   display: grid;
