@@ -184,25 +184,26 @@
         </button>
       </div>
     </div>
-
-    <!-- Mobilní vysouvací menu -->
-    <div class="mobile-menu" id="mobile-menu" hidden>
-      <nav aria-label="Mobilní navigace">
-        <ul class="mobile-menu__list">
-          <li><a class="mobile-menu__link" href="#hero">Úvod</a></li>
-          <li><a class="mobile-menu__link" href="#sluzby">Služby</a></li>
-          <li><a class="mobile-menu__link" href="#reference">Recenze</a></li>
-          <li><a class="mobile-menu__link" href="#o-mne">O mně</a></li>
-          <li><a class="mobile-menu__link" href="#kontakt">Kontakt</a></li>
-        </ul>
-        <div class="mobile-menu__actions">
-          <a class="btn btn--primary btn--block" href="#odhad-ceny">Zjistit cenu zdarma</a>
-          <a class="btn btn--ghost btn--block" href="tel:+420722792287"
-             data-cfg-href="agent.phoneTel" data-cfg="agent.phone">+420 722 792 287</a>
-        </div>
-      </nav>
-    </div>
   </header>
+
+  <!-- Mobilní vysouvací menu — mimo <header>, aby jeho z-index nebyl omezený
+       stacking kontextem hlavičky (ta má nižší z-index než backdrop, což by
+       menu schovalo pod backdrop a odkazy by nešly kliknout). -->
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <nav aria-label="Mobilní navigace">
+      <ul class="mobile-menu__list">
+        <li><a class="mobile-menu__link" href="#hero">Úvod</a></li>
+        <li><a class="mobile-menu__link" href="#sluzby">Služby</a></li>
+        <li><a class="mobile-menu__link" href="#reference">Recenze</a></li>
+        <li><a class="mobile-menu__link" href="#o-mne">O mně</a></li>
+        <li><a class="mobile-menu__link" href="#kontakt">Kontakt</a></li>
+      </ul>
+      <div class="mobile-menu__actions">
+        <a class="btn btn--primary btn--block" href="tel:+420722792287"
+           data-cfg-href="agent.phoneTel" data-cfg="agent.phone">+420 722 792 287</a>
+      </div>
+    </nav>
+  </div>
   <!-- Backdrop pro mobilní menu -->
   <div class="menu-backdrop" hidden></div>
 
@@ -437,14 +438,18 @@
 
           <!-- Souhrnné hodnocení — hodnoty z configu (reviews.rating); skryje se, když není value -->
           <aside class="reviews-rating" data-rating aria-label="Souhrnné hodnocení klientů">
-            <span class="reviews-rating__score"><span data-rating-value>5,0</span><span class="reviews-rating__out"> / <span data-rating-out>5</span></span></span>
-            <span class="reviews-rating__stars" aria-hidden="true">★★★★★</span>
-            <span class="reviews-rating__label" data-rating-label>hodnocení klientů</span>
-            <span class="reviews-rating__sources">
-              <a class="reviews-rating__src reviews-rating__src--logo" data-rating-google href="#" target="_blank" rel="noopener noreferrer"><img class="reviews-rating__logo" src="assets/img/google-logo.png" alt="Google" loading="lazy" decoding="async"></a>
-              <span aria-hidden="true"> · </span>
-              <a class="reviews-rating__src reviews-rating__src--logo" data-rating-firmy href="#" target="_blank" rel="noopener noreferrer"><img class="reviews-rating__logo reviews-rating__logo--firmy" src="assets/img/firmy-logo.png" alt="Firmy.cz" loading="lazy" decoding="async"></a>
-            </span>
+            <div class="reviews-rating__row reviews-rating__row--top">
+              <span class="reviews-rating__score"><span data-rating-value>5,0</span><span class="reviews-rating__out"> / <span data-rating-out>5</span></span></span>
+              <span class="reviews-rating__stars" aria-hidden="true">★★★★★</span>
+            </div>
+            <div class="reviews-rating__row reviews-rating__row--bottom">
+              <span class="reviews-rating__label" data-rating-label>hodnocení klientů</span>
+              <span class="reviews-rating__sources">
+                <a class="reviews-rating__src reviews-rating__src--logo" data-rating-google href="#" target="_blank" rel="noopener noreferrer"><img class="reviews-rating__logo" src="assets/img/google-logo.png" alt="Google" loading="lazy" decoding="async"></a>
+                <span aria-hidden="true"> · </span>
+                <a class="reviews-rating__src reviews-rating__src--logo" data-rating-firmy href="#" target="_blank" rel="noopener noreferrer"><img class="reviews-rating__logo reviews-rating__logo--firmy" src="assets/img/firmy-logo.png" alt="Firmy.cz" loading="lazy" decoding="async"></a>
+              </span>
+            </div>
           </aside>
         </div>
 
