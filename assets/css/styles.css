@@ -652,8 +652,20 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
      bez statistik pod ním — díky tomu pozadí končí přesně nad boxem se
      statistikami, ne za ním. Jeho horní hrana už leží přesně na spodní hraně
      záhlaví (odsazení o výšku headeru řeší .hero padding-top), takže tu
-     .hero__bg-mobile netřeba nic dalšího přičítat. */
-  .hero__visual { position: relative; }
+     .hero__bg-mobile netřeba nic dalšího přičítat.
+     min-height = zbytek výšky displeje pod záhlavím (100svh počítá i s
+     dolní vyhledávací/nástrojovou lištou Safari na iPhonu) — .hero__visual
+     tak VŽDY vyplní celou první obrazovku a box se statistikami (další
+     obsah v .hero, hned pod .hero__visual) začíná až pod jejím dolním
+     okrajem. flex: 1 1 auto (viz základní pravidlo výš) navíc umožní
+     .hero__visual ještě povyrůst, pokud by .hero (min-height 100svh) mělo
+     z jiného důvodu víc volného místa — min-height je tu jen bezpečná
+     spodní hranice, obsah se nikdy neořízne. */
+  .hero__visual {
+    position: relative;
+    min-height: calc(100vh - var(--header-h) - env(safe-area-inset-top));
+    min-height: calc(100svh - var(--header-h) - env(safe-area-inset-top));
+  }
 
   /* Vrstvené pozadí hero sekce: podklad (gradient) → ořezaná fotka u spodní
      hrany → tmavé překrytí navrch pro čitelnost textu. */
