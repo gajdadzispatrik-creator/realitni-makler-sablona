@@ -681,16 +681,25 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
      1cm (odsazení vršku) + 16px (padding-bottom .hero__inner) + 27px
      (polovina výšky .btn--lg, min-height 54px) = kolik se odečítá od 100 %. */
   .hero__bg-photo { background: url("../img/radim-vrana-cutout.webp") top 1cm center / auto calc(100% - 1cm - var(--space-4) - 27px) no-repeat; }
-  /* Ztmavení začíná cca od ramen (~35 % výšky kontejneru — hlava/obličej
-     zůstávají čisté) a je teď silnější/rychlejší — plně tmavé už od 50 %,
-     tedy přesně tam, kde díky margin-top:auto na .hero__content-top začíná
-     blok se jménem/hodnocením/benefity/tlačítky, aby byl bílý text čitelný. */
+  /* Ztmavení začíná výš (~22 % výšky kontejneru, cca krk/ramena) a je plně
+     tmavé (94 %) od 46 %, tedy ještě před blokem se jménem/hodnocením/
+     benefity/tlačítky (ten díky margin-top:auto na .hero__content-top
+     začíná kolem 50 %), aby byl bílý text vždy dobře čitelný. Hustá řada
+     mezistupňů (S-křivka, ne lineární skok) mezi 22-46 % = oko nevnímá
+     žádnou ostrou hranu (tzv. Mach band efekt na méně krocích). */
   .hero__bg-overlay {
     background: linear-gradient(180deg,
       rgba(13, 27, 36, .35) 0%,
-      rgba(13, 27, 36, 0)   15%,
-      rgba(13, 27, 36, .25) 35%,
-      rgba(13, 27, 36, .94) 50%);
+      rgba(13, 27, 36, 0)   10%,
+      rgba(13, 27, 36, 0)   22%,
+      rgba(13, 27, 36, .04) 25%,
+      rgba(13, 27, 36, .15) 28%,
+      rgba(13, 27, 36, .30) 31%,
+      rgba(13, 27, 36, .47) 34%,
+      rgba(13, 27, 36, .64) 37%,
+      rgba(13, 27, 36, .79) 40%,
+      rgba(13, 27, 36, .90) 43%,
+      rgba(13, 27, 36, .94) 46%);
   }
 
   /* "Zavolat Radimovi" v hero__cta — na hoveru zůstává tyrkysová výplň,
