@@ -387,17 +387,45 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   gap: var(--space-4);
   min-height: var(--header-h);
 }
+@media (max-width: 560px) {
+  /* --header-h je proměnná, ze které se počítá i padding-top hero sekce,
+     posun mobilního menu a scroll-margin kotev — přepsáním na :root se nižší
+     hlavička (menší logo + menší hamburger) promítne automaticky všude. */
+  :root { --header-h: 56px; }
+}
 
 /* Brand = monogram RV (hlavička je tyrkysová — bílý, stejný motiv jako
    vodoznak „RV" v kontaktní kartě formuláře). */
-.brand { display: inline-flex; align-items: center; }
+.brand { display: inline-flex; align-items: center; gap: 12px; }
+.brand__logo { height: 69px; width: auto; display: block; }
+.brand__divider { width: 1px; height: 34px; background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.5), transparent); flex: none; }
+@media (max-width: 560px) {
+  .brand__logo { height: 51px; }
+  .brand__divider { height: 31px; }
+  .brand__name { font-size: 16px; }
+  .brand__role { font-size: 11px; }
+}
 .brand__monogram {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  white-space: nowrap;
+}
+.brand__name {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 26px;
+  font-size: 19px;
   letter-spacing: -0.02em;
   line-height: 1;
   color: var(--color-white);
+}
+.brand__role {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  color: var(--color-white);
+  opacity: 0.85;
 }
 
 .nav { margin-left: auto; }
@@ -414,13 +442,13 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   position: absolute;
   left: 0; right: 0; bottom: 4px;
   height: 1px;
-  background: rgba(255, 255, 255, .75);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .75), transparent);
   transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--transition), background var(--transition);
+  transform-origin: center;
+  transition: transform var(--transition);
 }
 .nav__link:hover::after,
-.nav__link.is-active::after { transform: scaleX(1); background: var(--color-white); }
+.nav__link.is-active::after { transform: scaleX(1); }
 .nav__link:hover { color: var(--color-white); }
 .nav__link.is-active { color: var(--color-white); }
 
@@ -443,6 +471,10 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   align-items: center;
   justify-content: center;
   gap: 5px;
+}
+@media (max-width: 560px) {
+  .nav-toggle { width: 34px; height: 34px; gap: 4px; }
+  .nav-toggle__bar { width: 17px; }
 }
 .nav-toggle__bar {
   width: 22px; height: 2px;
@@ -506,8 +538,8 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   min-height: 100svh;
   /* Header je position:fixed (nezabírá místo v layoutu) → hero si musí sám
      odsadit obsah o jeho výšku, jinak jméno/nadpis schová/ořízne pod ním.
-     max(...,1cm) zaručí aspoň 1cm dechu i na nejmenším konci škály. */
-  padding-top: calc(var(--header-h) + env(safe-area-inset-top) + max(1cm, clamp(1.5rem, 0.8rem + 3vw, 3rem)));
+     1cm minimum (viz @media min-width:900px) platí jen pro desktop. */
+  padding-top: calc(var(--header-h) + env(safe-area-inset-top) + clamp(1.5rem, 0.8rem + 3vw, 3rem));
   padding-bottom: var(--space-8);
   /* Fotka v pozadí + světlé overlaye pro čitelnost textu.
      Vrstvy (odshora): overlay zleva, overlay nahoře+dole, FOTKA (hero-bg.png). */
@@ -546,18 +578,115 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   z-index: 0;
 }
 
+/* .hero__visual = obalový kontejner nad .hero__inner (kvůli mobilnímu pozadí,
+   viz @media max-width:899px níž) — přebírá "flex: 1 1 auto" po .hero__inner,
+   aby hero sekce dál automaticky vyplňovala výšku obrazovky (.hero má
+   min-height:100vh/100svh) a obsah uvnitř zůstal svisle vycentrovaný, i když
+   je teď o úroveň hlouběji v DOM. */
+.hero__visual {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
 .hero__inner {
   position: relative;
   z-index: 1;
-  flex: 1 1 auto;          /* zabere volný prostor → obsah vyplní výšku */
   display: grid;
-  grid-template-columns: 1fr;
+  /* minmax(0, 1fr) — bez toho by "1fr" sloupec nešel zmenšit pod min-content
+     šířku svého obsahu (fixní texty), takže by přetékal container. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-8);
   align-items: center;     /* zarovná sloupce navzájem */
   align-content: center;   /* vycentruje obsah svisle v plné výšce */
 }
 @media (max-width: 560px) {
   .hero__inner { gap: 10px; }
+}
+/* Mobil/tablet (jeden sloupec): pořadí fotka s vizitkou → jméno+nadpis+hodnocení
+   → benefity → tlačítka. .hero__content je "display:contents", aby se jeho
+   podbloky staly přímými položkami .hero__inner gridu vedle .hero__card a šlo
+   je přeskládat pomocí order — na desktopu (od 900px) se nic nemění, tam
+   .hero__content zůstává normální blok v původním pořadí. */
+.hero__bg-mobile { display: none; }
+@media (max-width: 899px) {
+  .hero {
+    padding-top: calc(var(--header-h) + env(safe-area-inset-top));
+    /* Vlastní vrstvené pozadí (.hero__bg-mobile) běží pod obsahem, kryje ale
+       jen .hero__visual — zbytek sekce (mezera nad statistikami) dostává
+       stejnou tmavou barvu, na jakou dobíhá spodek přelivu, aby to vizuálně
+       navazovalo a nebyl tam vidět bílý řez. */
+    background: #0e212b;
+  }
+  .hero__content { display: contents; }
+  /* Celý blok (nadpisy+hodnocení, benefity, tlačítka) je "přilepený" ke
+     spodní hraně hero sekce — margin-top: auto na PRVNÍM prvku odtlačí
+     celou skupinu co nejníž najednou (i když je nad viewportem volný
+     prostor), takže mezery uvnitř skupiny (hodnocení→benefity→tlačítka)
+     zůstávají pořád malé a stejné, ať je displej jakkoliv vysoký.
+     Zesíleno přes .hero__inner, protože základní ".hero__cta { margin-top }"
+     je dál v souboru a při stejné specificitě by jinak vyhrálo ono. */
+  .hero__inner .hero__content-top { order: 1; margin-top: auto; }
+  .hero__content-bottom { order: 2; }
+  .hero__inner .hero__cta { order: 3; margin-top: var(--space-4); }
+
+  .hero__inner { display: flex; flex-direction: column; flex: 1 1 auto; padding-bottom: var(--space-4); }
+
+  /* Na mobilu se celá karta makléře (fotka + vizitka + její vlastní tlačítko
+     "Zavolat Radimovi") skrývá — stejné tlačítko už je v .hero__cta, takže by
+     se jinak zobrazovalo dvakrát. */
+  .hero__card { display: none; }
+
+  /* H2 (jméno), hodnocení a benefity bílou barvou — text leží na tmavém
+     přelivu (.hero__bg-overlay), tmavá/šedá barva by tu nebyla čitelná.
+     Zesíleno přes .hero__inner, protože základní pravidla (.om-rating-text,
+     .hero__reasons li) jsou dál v souboru a při stejné specificitě by
+     jinak vyhrála ona. Hvězdičky (.om-stars) zůstávají zlaté beze změny. */
+  .hero__inner .hero__name,
+  .hero__inner .om-rating-text,
+  .hero__inner .hero__reasons li { color: #fff; }
+
+  /* .hero__visual = kratší kontejner jen pro horní část hero (pozadí + obsah),
+     bez statistik pod ním — díky tomu pozadí končí přesně nad boxem se
+     statistikami, ne za ním. Jeho horní hrana už leží přesně na spodní hraně
+     záhlaví (odsazení o výšku headeru řeší .hero padding-top), takže tu
+     .hero__bg-mobile netřeba nic dalšího přičítat. */
+  .hero__visual { position: relative; }
+
+  /* Vrstvené pozadí hero sekce: podklad (gradient) → ořezaná fotka u spodní
+     hrany → tmavé překrytí navrch pro čitelnost textu. */
+  .hero__bg-mobile { display: block; position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+  .hero__bg-base,
+  .hero__bg-photo,
+  .hero__bg-overlay { position: absolute; inset: 0; }
+  .hero__bg-base { background: linear-gradient(180deg, #3aa9c4, #1b6c80); }
+  /* Vršek (hlava, rámování) zůstává stejný jako předtím (top: 1cm) — výška je
+     teď vzorec, ne pevné %, aby spodní okraj fotky VŽDY (na libovolné výšce
+     displeje) skončil schovaný přesně v polovině tlačítka "Zavolat Radimovi",
+     ne až pod ním v mezeře, kde by bylo vidět, že se ořezává:
+     1cm (odsazení vršku) + 16px (padding-bottom .hero__inner) + 27px
+     (polovina výšky .btn--lg, min-height 54px) = kolik se odečítá od 100 %. */
+  .hero__bg-photo { background: url("../img/radim-vrana-cutout.webp") top 1cm center / auto calc(100% - 1cm - var(--space-4) - 27px) no-repeat; }
+  /* Ztmavení začíná cca od ramen (~40 % výšky kontejneru — hlava/obličej
+     zůstávají čisté, tmavne postupně dolů k tlačítkům). */
+  .hero__bg-overlay {
+    background: linear-gradient(180deg,
+      rgba(13, 27, 36, .35) 0%,
+      rgba(13, 27, 36, 0)   15%,
+      rgba(13, 27, 36, .15) 40%,
+      rgba(13, 27, 36, .92) 67%);
+  }
+
+  /* "Zavolat Radimovi" v hero__cta — na hoveru zůstává tyrkysová výplň,
+     mění se jen text na tmavý (místo výchozí .btn--primary:hover, která by
+     tu měnila i pozadí). :not(.hero__cta-dark) ho odliší od prvního tlačítka. */
+  .hero__cta a.btn--primary:not(.hero__cta-dark):hover {
+    --btn-bg: var(--color-primary);
+    --btn-fg: var(--color-text);
+    color: var(--color-text);
+  }
 }
 /* Statistiky jako spodní pruh hero sekce */
 .hero__stats { position: relative; z-index: 1; }
@@ -590,10 +719,10 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   white-space: nowrap; /* jméno vždy na jednom řádku */
   color: var(--color-text);
   margin-bottom: -0.25rem;
-  text-indent: -0.02em; /* optické srovnání kraje s menším H1 */
+  margin-left: -6px; /* optické srovnání kraje s hodnocením a benefity pod ním */
 }
 @media (max-width: 560px) {
-  .hero__name { margin-top: 32px; }
+  .hero__name { margin-top: 0; }
 }
 .hero__title {
   font-family: var(--font-display);
@@ -604,6 +733,7 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   white-space: nowrap; /* nadpis vždy na jednom řádku */
   max-width: 30ch;
   color: var(--color-primary);
+  margin-left: -6px; /* optické srovnání kraje s hodnocením a benefity pod ním */
 }
 .hero__rating { margin: var(--space-4) 0 0; }
 .hero__subtitle {
@@ -620,12 +750,20 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
 }
 .hero__cta .btn { flex: 1 1 auto; }
 /* "Chci prodat nemovitost" — stejná tmavá barevnost jako .kontakt-card__map-route
-   ("Zobrazit trasu"), místo výchozí tyrkysové .btn--primary. */
-.hero__cta .btn--primary { --btn-bg: #16232b; --btn-fg: #fff; }
-.hero__cta .btn--primary:hover { --btn-bg: var(--color-primary); --btn-fg: #fff; }
-/* "Zjistit cenu nemovitosti" — na hoveru plné tyrkysové pozadí, text zůstává tmavý.
-   color explicitně i v hoveru — jinak obecné "a:hover { color: ... }" pravidlo přebije. */
-.hero__cta .btn--outline:hover { --btn-bg: var(--color-primary); border-color: var(--color-primary); color: var(--color-text); }
+   ("Zobrazit trasu"), místo výchozí tyrkysové .btn--primary. Zúženo na
+   .hero__cta-dark, aby druhé tlačítko ("Zavolat Radimovi") mohlo zůstat
+   ve výchozí tyrkysové .btn--primary — stejný vizuál jako v .hero__contact. */
+.hero__cta .btn--primary.hero__cta-dark { --btn-bg: #16232b; --btn-fg: #fff; }
+.hero__cta .btn--primary.hero__cta-dark:hover { --btn-bg: var(--color-primary); --btn-fg: #fff; }
+
+/* Při hoveru na "Chci prodat nemovitost" dostane sousední "Zavolat Radimovi"
+   stejnou tmavou barevnost, jakou má to první tlačítko běžně (bílý text,
+   tmavá výplň #16232b) — "~" cílí na tlačítko, které v HTML následuje za ním. */
+.hero__cta .hero__cta-dark:hover ~ .btn--primary {
+  --btn-bg: #16232b;
+  --btn-fg: #fff;
+  color: #fff;
+}
 
 /* Tři konkrétní důvody důvěry */
 .hero__reasons {
@@ -633,15 +771,23 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   gap: var(--space-3);
   margin-top: var(--space-7);
 }
+@media (max-width: 899px) {
+  .hero__reasons { margin-top: 12px; }
+}
 .hero__reasons li {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr);
   gap: var(--space-3);
   align-items: start;
   font-size: 0.98rem;
   color: var(--color-text);
 }
-.hero__reason-ic { width: 20px; height: 20px; margin-top: 2px; color: var(--color-primary-darker); flex: none; }
+.hero__reason-ic { width: 20px; height: 20px; margin-top: 2px; margin-left: -3px; color: var(--color-primary-darker); flex: none; }
+@media (max-width: 560px) {
+  /* Každý benefit vždy na jednom řádku — text se místo zalomení radši zmenší
+     (vw-fluidní clamp), aby se vešel i na nejužší telefony (320px). */
+  .hero__reasons li span { white-space: nowrap; font-size: clamp(0.6rem, 3vw, 0.9rem); }
+}
 
 /* -------- Hero karta (fotka + překrývající kontaktní vizitka) -------------- */
 .hero__card { position: relative; width: 100%; max-width: 440px; justify-self: center; }
@@ -702,10 +848,19 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   box-shadow: 0 18px 44px rgba(28, 193, 221, 0.22);
 }
 .stat {
+  position: relative;
   text-align: center;
   padding-inline: clamp(var(--space-2), 2vw, var(--space-5));
 }
-.stat + .stat { border-left: 1px solid rgba(255, 255, 255, 0.28); }
+.stat + .stat::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8%;
+  bottom: 8%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+}
 @media (max-width: 560px) {
   .stats {
     grid-template-columns: 1fr;
@@ -720,8 +875,10 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
     content: "";
     position: absolute;
     top: 0;
+    bottom: auto;
     left: 8%;
     right: 8%;
+    width: auto;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .5), transparent);
   }
@@ -1108,36 +1265,56 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
 
 /* -----------------------------------------------------------------------------
    AKTUÁLNÍ NABÍDKA — tmavá karta s vypíchnutou nemovitostí (foto + cena/CTA).
+   -----------------------------------------------------------------------------
+   Tři OSTRÉ layoutové režimy (mobil / tablet / desktop), žádné plynulé
+   dopočítávání šířek mezi nimi — každý režim má vlastní pevná pravidla, aby
+   na mezilehlých rozlišeních nevznikaly deformované mezistavy.
+   Základ (bez media query) = mobilní pravidla (≤699px). Tablet 700–1099px
+   a desktop od 1100px dál jsou samostatné @media bloky níže.
    -------------------------------------------------------------------------- */
 #nabidka { padding-block: clamp(2rem, 1.5rem + 3vw, 4rem); }
-#nabidka .container { max-width: 1200px; }
+#nabidka .container { max-width: 1280px; }
 
 .nabidka-card {
-  display: grid;
-  grid-template-columns: 1.1fr .9fr;
+  max-width: 1280px;
+  margin-inline: auto;
   background: #0d1b24;
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  overflow: hidden; /* radius + přesahy fotek */
 }
 
-/* Levý sloupec — fotka nemovitosti. Foto se vymění nahrazením souboru
-   assets/img/nemovitost.png (stejný název), nebo úpravou cesty v background-image. */
-.nabidka-card__media {
-  position: relative;
-  min-height: 400px;
-  background-image: url("../img/nemovitost.png");
-  background-size: cover;
-  background-position: center;
+/* --- Galerie (3 samostatné fotky, ne koláž) --------------------------------
+   Foto vymění nahrazením assets/img/nabidka-koupelna.webp / -dum.webp /
+   -pokoj.webp (stejné názvy). grid-template-areas (ne pevná grid-row/column
+   čísla) — layout jde v každém režimu kompletně přeskládat jen přejmenováním
+   oblastí, beze změny HTML. */
+.nabidka-card__media { min-width: 0; }
+.nabidka-card__photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "main main" "top bottom";
+  gap: 2px;
+  background: rgba(255, 255, 255, .85); /* světlé mezery mezi fotkami */
 }
+.nabidka-card__photo-wrap { position: relative; overflow: hidden; min-width: 0; }
+/* Mobil (základ): hlavní fotka širokopásmá nahoře, dvě čtvercové pod ní. */
+.nabidka-card__photo-wrap--main { grid-area: main; aspect-ratio: 16 / 7; }
+.nabidka-card__photo-wrap--top { grid-area: top; aspect-ratio: 1 / 1; }
+.nabidka-card__photo-wrap--bottom { grid-area: bottom; aspect-ratio: 1 / 1; }
+.nabidka-card__photo { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Badge + cena/název — uvnitř --main wrapperu, takže se drží jen nad hlavní
+   fotkou ve všech třech režimech, nikdy nezasahují do vedlejších fotek. */
 .nabidka-card__badge {
   position: absolute;
-  top: 22px;
-  left: 22px;
+  top: 14px;
+  left: 14px;
+  z-index: 1;
   background: var(--color-primary);
   color: var(--color-white);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: 999px;
 }
 .nabidka-card__price-box {
@@ -1145,19 +1322,17 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 26px 28px;
+  z-index: 1;
+  padding: 16px 18px;
   background: linear-gradient(0deg, rgba(13, 27, 36, .9), transparent);
 }
-.nabidka-card__price { margin: 0; font-size: 24px; font-weight: 800; color: var(--color-white); }
-.nabidka-card__desc { margin: 4px 0 0; font-size: 15px; color: rgba(255, 255, 255, .85); }
+.nabidka-card__price { margin: 0; font-size: 20px; font-weight: 800; color: var(--color-white); }
+.nabidka-card__desc { margin: 4px 0 0; font-size: 13px; color: rgba(255, 255, 255, .85); }
 
-/* Pravý sloupec — text + CTA. Odkaz (href) doplň skutečnou URL webu RK. */
-.nabidka-card__content {
-  padding: 56px 52px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+/* --- Textový panel ---------------------------------------------------------
+   min-width:0 — bez toho by ho galerie/dlouhý text mohly roztáhnout přes
+   jeho gridovou buňku (relevantní hlavně pro desktop grid). */
+.nabidka-card__content { min-width: 0; padding: 24px 20px; }
 .nabidka-card__kicker {
   display: block;
   font-size: 12px;
@@ -1165,34 +1340,37 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   text-transform: uppercase;
   color: var(--color-primary);
   font-weight: 600;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 .nabidka-card__heading {
   font-family: var(--font-display);
-  font-size: 36px;
+  font-size: 23px;
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.2;
   color: var(--color-white);
-  margin: 0 0 var(--space-4);
+  margin: 0 0 var(--space-3);
+  text-wrap: balance;
+  overflow-wrap: normal;
 }
 .nabidka-card__heading-accent { color: var(--color-primary); }
 .nabidka-card__lead {
-  font-size: 15px;
-  line-height: 1.65;
+  font-size: 14.5px;
+  line-height: 1.6;
   color: rgba(255, 255, 255, .7);
-  max-width: 340px;
-  margin: 0 0 28px;
+  margin: 0 0 16px;
 }
 .nabidka-card__cta {
-  align-self: flex-start;
+  width: 100%;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4em;
   background: transparent;
   color: var(--color-white);
-  padding: 16px 34px;
+  padding: 14px 16px;
   border: 1px solid rgba(255, 255, 255, .3);
   border-radius: 12px;
+  font-size: 14.5px;
   font-weight: 700;
   text-decoration: none;
   transition: background var(--transition), border-color var(--transition), color var(--transition);
@@ -1201,11 +1379,64 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
    (specifičtější než jen barva zděděná ze základního stavu) přebije bílou. */
 .nabidka-card__cta:hover { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-white); }
 
-@media (max-width: 900px) {
-  .nabidka-card { grid-template-columns: 1fr; }
-  .nabidka-card__media { min-height: 260px; }
-  .nabidka-card__content { padding: 40px 24px; }
-  .nabidka-card__heading { font-size: 28px; }
+/* =========================================================================
+   TABLET — 700–1099px. Galerie NAD textem (ne vedle sebe), ale širší fotky
+   a víc vzduchu než mobil. Vlastní blok, ne mezistupeň mobilu a desktopu.
+   ========================================================================= */
+@media (min-width: 700px) and (max-width: 1099px) {
+  .nabidka-card__photo-wrap--main { aspect-ratio: 16 / 6.5; }
+  .nabidka-card__photo-wrap--top,
+  .nabidka-card__photo-wrap--bottom { aspect-ratio: 16 / 7; }
+  .nabidka-card__badge { top: 22px; left: 22px; font-size: 13px; padding: 8px 16px; }
+  .nabidka-card__price-box { padding: 26px 28px; }
+  .nabidka-card__price { font-size: 24px; }
+  .nabidka-card__desc { font-size: 15px; }
+
+  .nabidka-card__content { padding: 36px; }
+  .nabidka-card__kicker { margin-bottom: 14px; }
+  .nabidka-card__heading { font-size: 30px; margin-bottom: var(--space-4); }
+  .nabidka-card__lead { font-size: 15px; margin-bottom: 24px; }
+  .nabidka-card__cta { width: auto; max-width: 420px; padding: 15px 28px; font-size: 15px; }
+}
+
+/* =========================================================================
+   DESKTOP — od 1100px. Dva sloupce vedle sebe (~60/40), stejná výška.
+   Galerie: hlavní fotka vlevo (~66 %), dvě navršené vpravo (~34 %).
+   ========================================================================= */
+@media (min-width: 1100px) {
+  .nabidka-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(340px, 1fr);
+    align-items: stretch;
+  }
+  .nabidka-card__photos {
+    height: 100%;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: "main top" "main bottom";
+  }
+  /* Na desktopu výšku dodává stretch gridu (viz .nabidka-card výše), ne
+     aspect-ratio — ta by při vysokém textovém sloupci nutila fotky do
+     nepřirozeně vysokého poměru stran. */
+  .nabidka-card__photo-wrap--main,
+  .nabidka-card__photo-wrap--top,
+  .nabidka-card__photo-wrap--bottom { aspect-ratio: auto; height: 100%; }
+
+  .nabidka-card__badge { top: 22px; left: 22px; font-size: 13px; padding: 8px 16px; }
+  .nabidka-card__price-box { padding: 26px 28px; }
+  .nabidka-card__price { font-size: 24px; }
+  .nabidka-card__desc { font-size: 15px; }
+
+  .nabidka-card__content {
+    padding: 56px 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .nabidka-card__kicker { margin-bottom: 14px; }
+  .nabidka-card__heading { font-size: 34px; margin-bottom: var(--space-4); }
+  .nabidka-card__lead { font-size: 15px; max-width: 340px; margin-bottom: 28px; }
+  .nabidka-card__cta { width: auto; align-self: flex-start; padding: 16px 34px; font-size: 1rem; }
 }
 
 /* -----------------------------------------------------------------------------
@@ -1496,6 +1727,7 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   margin-bottom: var(--space-4);
 }
 .om-stars { color: #FBBC04; font-size: 15px; letter-spacing: 1px; line-height: 1; }
+.om-rating .om-stars { margin-left: -5px; }
 .om-rating-text { font-size: 14px; color: #6a7880; }
 .om-rating-text strong { color: #16232b; font-weight: 700; }
 /* zvýrazněný úvod — editorial blok */
@@ -1518,6 +1750,7 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   box-shadow: 0 16px 38px rgba(28, 193, 221, 0.24);
 }
 .about__trust li {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1528,7 +1761,15 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   line-height: 1.35;
   color: var(--color-white);
 }
-.about__trust li + li { border-left: 1px solid rgba(255, 255, 255, 0.28); }
+.about__trust li + li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8%;
+  bottom: 8%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+}
 @media (max-width: 560px) {
   .about__trust {
     grid-template-columns: 1fr;
@@ -1547,16 +1788,21 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
     content: "";
     position: absolute;
     top: 0;
+    bottom: auto;
     left: 8%;
     right: 8%;
+    width: auto;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .5), transparent);
   }
 }
 /* Desktop: širší bar, rozšířený symetricky na obě strany (vlevo pod fotku, vpravo do okraje),
-   zůstává centrovaný → prostřední benefit „Ostrava a okolí" je pod středem textu nad barem. */
+   zůstává centrovaný → prostřední benefit „Ostrava a okolí" je pod středem textu nad barem.
+   Přesah je omezený na skutečně volné místo do okraje obrazovky (1096px = šířka
+   .about__body gridu: 460px + 540px sloupce + 96px mezera), aby se na užších
+   desktopech (jako u hero .stats baru) zmenšil místo toho, aby se useknul. */
 @media (min-width: 900px) {
-  .about__trust { margin-inline: -139px; }
+  .about__trust { margin-inline: max(-139px, min(0px, calc((1096px - 100vw) / 2))); }
 }
 
 .about__text { color: var(--color-text-muted); line-height: 1.8; margin: 0 0 var(--space-5); break-inside: avoid; }
@@ -1876,6 +2122,22 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
   --kontakt-map-inset: max(var(--container-pad), calc((100vw - var(--container-max)) / 2 + var(--container-pad)));
 }
 .kontakt-card__iframe { width: 100%; height: 100%; border: 0; display: block; }
+.kontakt-card__map-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  padding: var(--space-5);
+  background: linear-gradient(135deg, var(--color-bg-soft), var(--color-primary-soft));
+  color: var(--color-text-muted);
+}
+.kontakt-card__map-placeholder-ic { width: 34px; height: 34px; color: var(--color-primary-darker); }
+.kontakt-card__map-placeholder-text { max-width: 40ch; font-size: var(--fs-sm); margin: 0; }
+.kontakt-card__map-placeholder-btn { background: var(--color-white); }
 /* Tyrkysový závoj přes mapu — zmizí při najetí myší (mapa je do té doby jen
    dekorativní náhled, ne rušivě interaktivní). */
 .kontakt-card__map::before {
@@ -2046,7 +2308,7 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
 .lead-card__phone { display: inline-block; font-size: 22px; font-weight: 800; color: var(--color-white); text-decoration: none; margin: 0 0 20px; }
 .lead-card__phone:hover { color: rgba(255, 255, 255, .85); }
 
-.lead-card__rating { display: flex; align-items: center; gap: 8px; margin: 2px 0 0; font-size: 13px; line-height: 1.3; color: rgba(255, 255, 255, .85); }
+.lead-card__rating { display: flex; align-items: center; gap: 4px; margin: 2px 0 0; font-size: 13px; line-height: 1.3; color: rgba(255, 255, 255, .85); }
 .lead-card__stars { color: #FBBC04; letter-spacing: 2px; }
 
 @media (max-width: 900px) {
@@ -2479,9 +2741,8 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
   .nav { display: none; }
   .header__cta { display: none; }
   .nav-toggle { display: inline-flex; }
-  /* Monogram pryč + hamburger doprava (dřív ho tam tlačil jen .nav svým
-     margin-left:auto, který zmizel spolu s .nav). */
-  .brand { display: none; }
+  /* Hamburger doprava (dřív ho tam tlačil jen .nav svým margin-left:auto,
+     který zmizel spolu s .nav). Logo+jméno teď zůstává vlevo vidět. */
   .header__actions { margin-left: auto; }
 }
 /* Nelámat texty v hlavičce */
@@ -2494,9 +2755,18 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
 
 /* Desktop layout pro hero / about / kontakt */
 @media (min-width: 900px) {
+  /* 1cm minimum nad fotkou makléře i pod kartou "Zavolat Radimovi" — jen na desktopu. */
+  .hero { padding-top: calc(var(--header-h) + env(safe-area-inset-top) + max(1cm, clamp(1.5rem, 0.8rem + 3vw, 3rem))); }
+  .stats { margin-top: max(1cm, var(--space-7)); }
   .hero__inner { grid-template-columns: 1.15fr 0.85fr; gap: var(--space-9); }
+  /* Textový sloupec posunutý o 1cm doprava oproti statistikám pod ním
+     (ty začínají na okraji containeru beze změny). */
+  .hero__content { margin-left: 1cm; }
   .hero__cta .btn { flex: 0 1 auto; }
-  .hero__card { max-width: 400px; justify-self: end; }
+  /* justify-self:end → margin-right doplní containerový padding do zaručeného 1cm.
+     align-self:start — karta se drží nahoře (hned pod garantovanou 1cm mezerou),
+     místo aby ji svislé centrování v rámci (vyššího) řádku tlačilo níž. */
+  .hero__card { max-width: 400px; justify-self: end; align-self: start; margin-right: max(0px, 1cm - var(--container-pad)); }
   /* Výšku fotky vážeme na výšku obrazovky → hero se vejde i na nízké notebooky.
      Horní hranice navíc zaručuje aspoň 1cm místa nad hlavou (foto + vizitka
      jako jeden celek) — pokud by se nevešly, proporčně se zmenší. Transform
@@ -2518,7 +2788,7 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
     column-gap: var(--space-9);
     row-gap: var(--space-7);
   }
-  .about__media { grid-area: media; align-self: start; max-width: none; margin-inline: 0; }
+  .about__media { grid-area: media; align-self: start; max-width: 400px; margin-inline: 0; }
   /* pravý blok = stejná výška jako fotka, obsah svisle vycentrovaný, editorial šířka */
   .about__head { grid-area: head; display: flex; flex-direction: column; justify-content: center; max-width: 540px; }
   /* dlouhý text po rozbalení do 2 sloupců s příjemnou šířkou řádku */
@@ -2544,7 +2814,7 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
   .hero__cta { margin-top: var(--space-4); }
   .hero__reasons { margin-top: var(--space-4); padding-top: var(--space-4); gap: var(--space-2); }
   .hero__photo-wrap { height: clamp(280px, 40svh, min(420px, calc(100svh - var(--header-h) - env(safe-area-inset-top) - 1cm - var(--space-8)))); }
-  .stats { margin-top: var(--space-5); padding-block: var(--space-4); }
+  .stats { margin-top: max(1cm, var(--space-5)); padding-block: var(--space-4); }
   .stat__value { font-size: clamp(1.1rem, 0.9rem + 1vw, 1.6rem); }
 }
 
@@ -2558,3 +2828,83 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
 @media print {
   .site-header, .mobile-menu, .menu-backdrop, .nav-toggle, .form { display: none !important; }
 }
+
+/* -----------------------------------------------------------------------------
+   16) PRÁVNÍ STRÁNKY (ochrana osobních údajů, cookies)
+   -------------------------------------------------------------------------- */
+.legal-hero { padding-top: calc(var(--header-h) + env(safe-area-inset-top) + var(--space-8)); padding-bottom: var(--space-6); }
+.legal-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: var(--space-6);
+  color: var(--color-text-muted);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+}
+.legal-back:hover { color: var(--color-primary-darker); }
+.legal-back svg { width: 16px; height: 16px; flex: none; }
+.legal-updated { color: var(--color-text-muted); font-size: var(--fs-sm); margin-top: var(--space-3); }
+
+.legal-toc {
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.legal-toc__title {
+  margin: 0 0 var(--space-3);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.legal-toc ol {
+  margin: 0;
+  padding-left: 1.2em;
+  columns: 1;
+}
+.legal-toc li { margin-bottom: var(--space-2); }
+.legal-toc li:last-child { margin-bottom: 0; }
+.legal-toc a { color: var(--color-primary-darker); text-decoration: none; }
+.legal-toc a:hover { color: var(--color-primary-dark); text-decoration: underline; text-underline-offset: 2px; }
+@media (min-width: 700px) {
+  .legal-toc ol { columns: 2; column-gap: var(--space-6); }
+}
+
+.legal-content { padding-bottom: var(--space-9); color: var(--color-text); }
+.legal-content h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h3);
+  letter-spacing: -0.01em;
+  margin: var(--space-8) 0 var(--space-4);
+}
+.legal-content h2:first-child { margin-top: 0; }
+.legal-content h3 {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin: var(--space-6) 0 var(--space-3);
+}
+.legal-content p { color: var(--color-text-muted); line-height: 1.8; margin: 0 0 var(--space-4); }
+.legal-content p:last-child { margin-bottom: 0; }
+.legal-content ul, .legal-content ol {
+  color: var(--color-text-muted);
+  line-height: 1.8;
+  margin: 0 0 var(--space-4);
+  padding-left: 1.3em;
+}
+.legal-content li { margin-bottom: var(--space-2); }
+.legal-content li:last-child { margin-bottom: 0; }
+.legal-content strong { color: var(--color-text); }
+.legal-content a { color: var(--color-primary-darker); text-decoration: underline; text-underline-offset: 2px; }
+.legal-content a:hover { color: var(--color-primary-dark); }
+
+.legal-table-wrap { overflow-x: auto; margin: 0 0 var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+.legal-table { width: 100%; min-width: 480px; border-collapse: collapse; font-size: var(--fs-sm); }
+.legal-table th, .legal-table td { text-align: left; padding: var(--space-3) var(--space-4); vertical-align: top; }
+.legal-table th { background: var(--color-bg-soft); color: var(--color-text); font-weight: 700; white-space: nowrap; }
+.legal-table td { color: var(--color-text-muted); border-top: 1px solid var(--color-border); }
+.legal-table tr:first-child td { border-top: 0; }

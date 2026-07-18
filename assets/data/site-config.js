@@ -27,13 +27,15 @@ window.SITE_CONFIG = {
     email: "radim@mintreality.cz",
     photo: "assets/img/radim-vrana.webp", // portrét na výšku, ideálně poměr 4:5
     photoAlt: "Radim Vrána — realitní makléř Ostrava",
+    avatarPhoto: "assets/img/radim-vrana-avatar.webp", // čtvercový ořez na obličej — pro malé kolečko v kontaktní kartě (celotělová `photo` by tam byla rozmazaná/moc oddálená)
   },
 
   /* --- Realitní kancelář -------------------------------------------------- */
   office: {
     name: "MINT reality & finance",
+    legalName: "MINT reality a finance s.r.o.", // plný obchodní název pro právní stránky (zásady ochrany osobních údajů)
     logo: "assets/img/logo.png",
-    ico: "",          // nepovinné — když prázdné, řádek v patičce se skryje
+    ico: "24406571",  // nepovinné — když prázdné, řádek v patičce se skryje
     address: "17. listopadu 599/30, Ostrava-Poruba",
   },
 
@@ -81,8 +83,8 @@ window.SITE_CONFIG = {
   /* --- Sociální sítě ------------------------------------------------------ */
   /* Prázdný řetězec = odkaz se nezobrazí. */
   social: {
-    facebook: "#", // TODO: nahraď skutečným odkazem na Facebook profil/stránku
-    instagram: "#", // TODO: nahraď skutečným odkazem na Instagram profil
+    facebook: "https://www.facebook.com/radimvranamintreality",
+    instagram: "https://www.instagram.com/radimvrana/?utm_source=ig_web_button_share_sheet",
     linkedin: "",
   },
 

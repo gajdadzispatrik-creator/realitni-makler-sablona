@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <title>Zásady používání cookies | Radim Vrána — Realitní makléř Ostrava</title>
+  <meta name="description" content="Jaké cookies web realitního makléře Radima Vrány používá, k čemu slouží a jak si jejich používání můžete nastavit nebo odvolat souhlas." />
+  <link rel="canonical" href="https://www.vas-makler.cz/cookies.html" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#1CC1DD" />
+
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/img/favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" />
+
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Přeskočit na obsah</a>
+
+  <!-- =========================================================================
+       HEADER (shodné s index.html — kotvy vedou zpět na hlavní stránku)
+       ====================================================================== -->
+  <header class="site-header" id="top">
+    <div class="container header__inner">
+      <a class="brand" href="index.html" aria-label="Domů — Radim Vrána, realitní makléř">
+        <img class="brand__logo" src="assets/img/logo-bíle.png" alt="" aria-hidden="true" />
+        <span class="brand__divider" aria-hidden="true"></span>
+        <span class="brand__monogram" aria-hidden="true">
+          <span class="brand__name" data-cfg="agent.name">Radim Vrána</span>
+          <span class="brand__role">Realitní makléř</span>
+        </span>
+      </a>
+
+      <nav class="nav" id="primary-nav" aria-label="Hlavní navigace">
+        <ul class="nav__list">
+          <li><a class="nav__link" href="index.html#hero">Úvod</a></li>
+          <li><a class="nav__link" href="index.html#sluzby">Služby</a></li>
+          <li><a class="nav__link" href="index.html#reference">Recenze</a></li>
+          <li><a class="nav__link" href="index.html#o-mne">O mně</a></li>
+          <li><a class="nav__link" href="index.html#kontakt">Kontakt</a></li>
+        </ul>
+      </nav>
+
+      <div class="header__actions">
+        <button class="nav-toggle" type="button"
+                aria-label="Otevřít menu" aria-expanded="false" aria-controls="mobile-menu">
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <nav aria-label="Mobilní navigace">
+      <ul class="mobile-menu__list">
+        <li><a class="mobile-menu__link" href="index.html#hero">Úvod</a></li>
+        <li><a class="mobile-menu__link" href="index.html#sluzby">Služby</a></li>
+        <li><a class="mobile-menu__link" href="index.html#reference">Recenze</a></li>
+        <li><a class="mobile-menu__link" href="index.html#o-mne">O mně</a></li>
+        <li><a class="mobile-menu__link" href="index.html#kontakt">Kontakt</a></li>
+      </ul>
+      <div class="mobile-menu__actions">
+        <a class="btn btn--primary btn--block" href="tel:+420722792287"
+           data-cfg-href="agent.phoneTel" data-cfg="agent.phone">+420 722 792 287</a>
+      </div>
+    </nav>
+  </div>
+  <div class="menu-backdrop" hidden></div>
+
+  <main id="main">
+    <section class="section legal-hero">
+      <div class="container container--narrow">
+        <a class="legal-back" href="index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+          Zpět na hlavní stránku
+        </a>
+        <header class="section__head">
+          <span class="om-kicker">PRÁVNÍ INFORMACE</span>
+          <h1 class="section__title">Zásady používání cookies</h1>
+          <p class="section__lead">Jaké cookies na tomto webu používáme, k čemu slouží a jak si jejich použití nastavit.</p>
+        </header>
+        <p class="legal-updated">Poslední aktualizace: 18. 7. 2026</p>
+
+        <nav class="legal-toc" aria-label="Obsah stránky">
+          <p class="legal-toc__title">Obsah</p>
+          <ol>
+            <li><a href="#co-jsou">Co jsou cookies</a></li>
+            <li><a href="#souhlas">Jak souhlas na tomto webu funguje</a></li>
+            <li><a href="#kategorie">Kategorie cookies, které používáme</a></li>
+            <li><a href="#treti-strany">Vložený obsah třetích stran</a></li>
+            <li><a href="#jak-odmitnout">Jak cookies odmítnout nebo smazat v prohlížeči</a></li>
+            <li><a href="#souvisejici">Související informace</a></li>
+            <li><a href="#kontakt-cookies">Kontakt</a></li>
+          </ol>
+        </nav>
+      </div>
+    </section>
+
+    <section class="section legal-content" style="padding-top: 0;">
+      <div class="container container--narrow">
+
+        <h2 id="co-jsou">1. Co jsou cookies</h2>
+        <p>
+          Cookies jsou malé textové soubory, které si při návštěvě webu ukládá váš prohlížeč do zařízení
+          (počítače, telefonu, tabletu). Umožňují webu zapamatovat si vaše nastavení, případně nám pomáhají
+          pochopit, jak návštěvníci web používají, abychom ho mohli postupně vylepšovat.
+        </p>
+
+        <h2 id="souhlas">2. Jak souhlas na tomto webu funguje</h2>
+        <p>
+          Při první návštěvě se vám zobrazí lišta s možností cookies přijmout, nebo si otevřít podrobné
+          nastavení a rozhodnout se za jednotlivé kategorie zvlášť. Vaše volba se uloží do prohlížeče
+          (localStorage) a lišta se pak už nezobrazuje. Svou volbu můžete kdykoli změnit nebo souhlas odvolat
+          přes odkaz <a href="#" data-cookie-settings-reopen>Nastavení cookies</a> v patičce webu.
+        </p>
+
+        <h2 id="kategorie">3. Kategorie cookies, které používáme</h2>
+
+        <h3>Nezbytné cookies</h3>
+        <p>Nutné pro základní chod webu. Bez nich by web nefungoval správně, a proto je nelze vypnout.</p>
+        <div class="legal-table-wrap">
+          <table class="legal-table">
+            <thead>
+              <tr><th>Název</th><th>Účel</th><th>Doba platnosti</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>cookieConsent</td>
+                <td>Uložení vaší volby souhlasu s jednotlivými kategoriemi cookies (localStorage vašeho prohlížeče).</td>
+                <td>Do ručního smazání / odvolání souhlasu</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Analytické cookies</h3>
+        <p>
+          Pomáhají nám anonymně sledovat návštěvnost a chování na webu (např. které stránky jsou nejnavštěvovanější),
+          abychom web mohli dále vylepšovat. Aktivují se pouze v případě, že jim udělíte souhlas v nastavení cookies —
+          do té doby se nenačítají. V současné době web žádný analytický nástroj aktivně nenasazuje; pokud v budoucnu
+          nasadíme nástroj jako Google Analytics, budou platit následující typické parametry a tato stránka bude
+          odpovídajícím způsobem aktualizována:
+        </p>
+        <div class="legal-table-wrap">
+          <table class="legal-table">
+            <thead>
+              <tr><th>Název</th><th>Poskytovatel</th><th>Účel</th><th>Doba platnosti</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>_ga</td>
+                <td>Google Analytics</td>
+                <td>Rozlišení jednotlivých návštěvníků webu.</td>
+                <td>až 13 měsíců</td>
+              </tr>
+              <tr>
+                <td>_ga_*</td>
+                <td>Google Analytics</td>
+                <td>Uchování stavu relace pro měření návštěvnosti.</td>
+                <td>až 13 měsíců</td>
+              </tr>
+              <tr>
+                <td>_gid</td>
+                <td>Google Analytics</td>
+                <td>Rozlišení návštěvníků v rámci 24 hodin.</td>
+                <td>24 hodin</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="treti-strany">4. Vložený obsah třetích stran</h2>
+        <p>
+          V sekci Kontakt nabízíme mapu naší kanceláře od služby Google Maps. Aby se nenačítala bez vašeho
+          souhlasu, zobrazí se až poté, co v cookie liště nebo v nastavení cookies povolíte kategorii
+          Analytické — do té doby vidíte jen statický náhled s odkazem na nastavení. Po zobrazení se mapa
+          načítá přímo od společnosti Google LLC, která může nezávisle na výše uvedených kategoriích
+          nastavovat vlastní soubory cookies a zpracovávat technické údaje o vaší návštěvě (např. IP adresu)
+          v souladu se svými zásadami ochrany soukromí. Více informací najdete v
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">zásadách ochrany soukromí Google</a>.
+        </p>
+
+        <h2 id="jak-odmitnout">5. Jak cookies odmítnout nebo smazat v prohlížeči</h2>
+        <p>
+          Kromě nastavení přímo na tomto webu můžete cookies spravovat i na úrovni svého prohlížeče —
+          zablokovat jejich ukládání, nebo již uložené cookies smazat. Postup se liší podle prohlížeče,
+          návody obvykle najdete v nápovědě daného prohlížeče (Chrome, Firefox, Safari, Edge apod.).
+          Upozorňujeme, že zablokování nezbytných cookies může omezit funkčnost webu.
+        </p>
+
+        <h2 id="souvisejici">6. Související informace</h2>
+        <p>
+          Informace o tom, jak zpracováváme osobní údaje získané prostřednictvím kontaktního formuláře
+          a dalších částí webu, najdete v dokumentu
+          <a href="ochrana-osobnich-udaju.html">Zásady ochrany osobních údajů</a>.
+        </p>
+
+        <h2 id="kontakt-cookies">7. Kontakt</h2>
+        <p>
+          V případě dotazů ohledně používání cookies nás kontaktujte na
+          <a href="mailto:radim@mintreality.cz" data-cfg-href="agent.emailMailto" data-cfg="agent.email">radim@mintreality.cz</a>.
+        </p>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       FOOTER (shodné s index.html)
+       ====================================================================== -->
+  <footer class="site-footer">
+    <div class="footer__grid">
+      <div class="footer__col footer__col--brand">
+        <p class="footer__name" data-cfg="agent.name">Radim Vrána</p>
+        <p class="footer__claim">Profesionální realitní služby v Ostravě.</p>
+        <ul class="footer__social" data-social aria-label="Sociální sítě"></ul>
+      </div>
+
+      <div class="footer__col">
+        <h2 class="footer__heading">Rychlé odkazy</h2>
+        <ul class="footer__links">
+          <li><a href="index.html#hero">Úvod</a></li>
+          <li><a href="index.html#sluzby">Služby</a></li>
+          <li><a href="index.html#reference">Reference</a></li>
+          <li><a href="index.html#o-mne">O mně</a></li>
+          <li><a href="index.html#kontakt">Kontakt</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h2 class="footer__heading">Právní info</h2>
+        <ul class="footer__links">
+          <li><a href="ochrana-osobnich-udaju.html">Ochrana osobních údajů</a></li>
+          <li><a href="cookies.html">Cookies</a></li>
+          <li><a href="#" data-cookie-settings-reopen>Nastavení cookies</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h2 class="footer__heading">Kontakt</h2>
+        <ul class="footer__contact">
+          <li>
+            <svg class="footer__contact-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+            <a href="tel:+420722792287" data-cfg-href="agent.phoneTel" data-cfg="agent.phone">+420 722 792 287</a>
+          </li>
+          <li>
+            <svg class="footer__contact-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            <a href="mailto:radim@mintreality.cz" data-cfg-href="agent.emailMailto" data-cfg="agent.email">radim@mintreality.cz</a>
+          </li>
+          <li class="footer__contact-item--address">
+            <svg class="footer__contact-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-7h6v7"/></svg>
+            <a href="https://maps.google.com/?q=17.+listopadu+599/30,+Ostrava-Poruba,+708+00"
+               target="_blank" rel="noopener noreferrer">17. listopadu 599/30,<br>Ostrava-Poruba</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p>&copy; <span data-year>2026</span> <span data-cfg="office.name">MINT reality &amp; finance</span> | Všechna práva vyhrazena</p>
+    </div>
+  </footer>
+
+  <!-- =======================================================================
+       COOKIE CONSENT — shodné s index.html
+       ==================================================================== -->
+  <div class="cookie-consent" id="cookie-consent" role="dialog" aria-label="Souhlas s používáním cookies" aria-hidden="true" hidden>
+    <div class="cookie-consent__left">
+      <div class="cookie-consent__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <circle cx="9.2" cy="9.8" r="1" fill="currentColor" stroke="none"/>
+          <circle cx="14.3" cy="8.8" r="1" fill="currentColor" stroke="none"/>
+          <circle cx="15" cy="13.8" r="1" fill="currentColor" stroke="none"/>
+          <circle cx="10" cy="15.3" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+      <p class="cookie-consent__text">
+        Používáme cookies pro správné fungování webu a analýzu návštěvnosti.
+        <a href="cookies.html" class="cookie-consent__link">Více informací</a>
+      </p>
+    </div>
+    <div class="cookie-consent__actions">
+      <button type="button" class="cookie-btn cookie-btn--outline" data-cookie-open-settings>Nastavení</button>
+      <button type="button" class="cookie-btn cookie-btn--solid" data-cookie-accept>Přijmout vše</button>
+    </div>
+  </div>
+
+  <div class="cookie-settings" id="cookie-settings" role="dialog" aria-label="Nastavení cookies" aria-hidden="true" hidden>
+    <div class="cookie-settings__backdrop" data-cookie-close-settings></div>
+    <div class="cookie-settings__panel">
+      <h2 class="cookie-settings__title">Nastavení cookies</h2>
+      <p class="cookie-settings__lead">Vyberte, které kategorie cookies chcete povolit. Nezbytné cookies nelze vypnout, bez nich by web nefungoval správně.</p>
+
+      <div class="cookie-settings__row">
+        <div class="cookie-settings__row-text">
+          <p class="cookie-settings__row-title">Nezbytné</p>
+          <p class="cookie-settings__row-desc">Nutné pro základní chod webu (např. zapamatování vaší volby). Vždy aktivní.</p>
+        </div>
+        <span class="cookie-toggle cookie-toggle--locked" aria-hidden="true"><span class="cookie-toggle__thumb"></span></span>
+      </div>
+
+      <div class="cookie-settings__row">
+        <div class="cookie-settings__row-text">
+          <p class="cookie-settings__row-title">Analytické</p>
+          <p class="cookie-settings__row-desc">Pomáhají nám pochopit, jak web používáte, a postupně ho vylepšovat.</p>
+        </div>
+        <label class="cookie-toggle">
+          <input type="checkbox" id="cookie-toggle-analytics" />
+          <span class="cookie-toggle__thumb"></span>
+        </label>
+      </div>
+
+      <div class="cookie-settings__actions">
+        <button type="button" class="cookie-btn cookie-btn--outline" data-cookie-close-settings>Zrušit</button>
+        <button type="button" class="cookie-btn cookie-btn--solid" data-cookie-save-settings>Uložit výběr</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/data/site-config.js"></script>
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>

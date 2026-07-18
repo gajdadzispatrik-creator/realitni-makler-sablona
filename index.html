@@ -73,9 +73,13 @@
       "telephone": "+420722792287",
       "email": "radim@mintreality.cz"
     }
-    /* , "sameAs": ["https://facebook.com/...", "https://instagram.com/..."] */
   }
   </script>
+  <!-- Pozn.: až budou reálné odkazy na sociální sítě (viz assets/data/site-config.js → social),
+       přidej do objektu výše platnou JSON vlastnost "sameAs": ["https://facebook.com/...", ...].
+       JSON nepodporuje komentáře — sem se žádný takový klíč přidat NESMÍ, jinak je celý blok
+       neplatný a Google ho celý ignoruje (ověřeno: tahle chyba tu byla dřív). -->
+
 
   <!-- FAQPage – pouze otázky a odpovědi skutečně viditelné v sekci #faq.
        Při změně textů FAQ aktualizuj i tento blok, ať se shoduje s obsahem stránky. -->
@@ -89,15 +93,15 @@
         "name": "Kolik stojí služby makléře?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Odměna se vždy řeší podle typu nemovitosti a rozsahu služeb. Na první schůzce si řekneme, co přesně potřebujete, jaký postup dává smysl a jak bude odměna nastavená. Vše budete vědět předem."
+          "text": "Odměna se odvíjí od typu nemovitosti, její hodnoty a rozsahu poskytovaných služeb. Na první schůzce společně projdeme vaši situaci, navrhnu vhodný postup a vše včetně odměny si předem transparentně odsouhlasíme."
         }
       },
       {
         "@type": "Question",
-        "name": "Jak dlouho trvá prodej nemovitosti?",
+        "name": "Jak dlouho trvá prodej?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Záleží na typu nemovitosti, lokalitě, ceně a aktuální poptávce. U správně naceněné a dobře připravené nemovitosti může být zájem velmi rychlý. Důležité ale není jen prodat rychle, ale bezpečně a za rozumných podmínek."
+          "text": "Prodej nemovitosti obvykle trvá přibližně 1 až 3 měsíce. Konkrétní doba závisí především na správně nastavené ceně, typu nemovitosti, lokalitě a aktuální situaci na trhu."
         }
       },
       {
@@ -110,10 +114,10 @@
       },
       {
         "@type": "Question",
-        "name": "Musím něco platit předem?",
+        "name": "Platím něco předem?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "To záleží na konkrétní domluvě a rozsahu služeb. Vše si řekneme předem, aby bylo jasné, co je součástí spolupráce a kdy se případně co hradí. Bez vašeho souhlasu se do ničeho nepouštíme."
+          "text": "Ne, předem nic neplatíte. Mou odměnu hradíte pouze v případě úspěšně dokončeného obchodu."
         }
       },
       {
@@ -129,7 +133,7 @@
         "name": "Pomůžete s hypotékou kupujícího?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Ano, pokud je potřeba, umím pomoci i s návazností na financování. Díky tomu se dá lépe pohlídat, aby měl kupující reálnou možnost nemovitost doplatit a obchod zbytečně nestál."
+          "text": "Ano. Díky spolupráci s hypotečními specialisty dokážeme kupujícím pomoci se zajištěním financování. Prodávajícímu to přináší větší jistotu, že kupující hypotéku skutečně získá a celý obchod proběhne rychleji a bezpečněji."
         }
       },
       {
@@ -162,7 +166,12 @@
   <header class="site-header" id="top">
     <div class="container header__inner">
       <a class="brand" href="#top" aria-label="Domů — Radim Vrána, realitní makléř">
-        <span class="brand__monogram" aria-hidden="true">RV</span>
+        <img class="brand__logo" src="assets/img/logo-bíle.png" alt="" aria-hidden="true" />
+        <span class="brand__divider" aria-hidden="true"></span>
+        <span class="brand__monogram" aria-hidden="true">
+          <span class="brand__name" data-cfg="agent.name">Radim Vrána</span>
+          <span class="brand__role">Realitní makléř</span>
+        </span>
       </a>
 
       <nav class="nav" id="primary-nav" aria-label="Hlavní navigace">
@@ -212,51 +221,75 @@
          HERO
          ==================================================================== -->
     <section class="hero" id="hero" aria-labelledby="hero-title">
-      <!-- Liniový půdorysný motiv v pozadí (dekorace, decentní realitní detail) -->
-      <svg class="hero__floorplan" viewBox="0 0 400 320" fill="none" stroke="currentColor"
-           stroke-width="1.4" stroke-linejoin="round" aria-hidden="true">
-        <rect x="8" y="8" width="384" height="304"/>
-        <line x1="170" y1="8" x2="170" y2="200"/>
-        <line x1="8" y1="200" x2="392" y2="200"/>
-        <line x1="170" y1="120" x2="392" y2="120"/>
-        <line x1="280" y1="120" x2="280" y2="200"/>
-        <path d="M170 60a30 30 0 0 1 30 30"/>
-        <path d="M92 200a26 26 0 0 1 26-26"/>
-        <line x1="42" y1="8" x2="96" y2="8" stroke-width="4"/>
-        <line x1="8" y1="244" x2="8" y2="288" stroke-width="4"/>
-        <line x1="300" y1="312" x2="352" y2="312" stroke-width="4"/>
-      </svg>
+      <!-- Vizuální horní část hero (pozadí + obsah) — na mobilu je to samostatný
+           kratší kontejner, aby pozadí (gradient/fotka) končilo nad statistikami
+           a ne za nimi. Na desktopu je to jen obalový div beze změny chování. -->
+      <div class="hero__visual">
+        <!-- Vrstvené pozadí hero sekce pro mobil (podklad + fotka + tmavé překrytí).
+             Na desktopu se nezobrazuje, tam běží původní .hero background-image. -->
+        <div class="hero__bg-mobile" aria-hidden="true">
+          <div class="hero__bg-base"></div>
+          <div class="hero__bg-photo"></div>
+          <div class="hero__bg-overlay"></div>
+        </div>
 
-      <div class="container hero__inner">
+        <!-- Liniový půdorysný motiv v pozadí (dekorace, decentní realitní detail) -->
+        <svg class="hero__floorplan" viewBox="0 0 400 320" fill="none" stroke="currentColor"
+             stroke-width="1.4" stroke-linejoin="round" aria-hidden="true">
+          <rect x="8" y="8" width="384" height="304"/>
+          <line x1="170" y1="8" x2="170" y2="200"/>
+          <line x1="8" y1="200" x2="392" y2="200"/>
+          <line x1="170" y1="120" x2="392" y2="120"/>
+          <line x1="280" y1="120" x2="280" y2="200"/>
+          <path d="M170 60a30 30 0 0 1 30 30"/>
+          <path d="M92 200a26 26 0 0 1 26-26"/>
+          <line x1="42" y1="8" x2="96" y2="8" stroke-width="4"/>
+          <line x1="8" y1="244" x2="8" y2="288" stroke-width="4"/>
+          <line x1="300" y1="312" x2="352" y2="312" stroke-width="4"/>
+        </svg>
+
+        <div class="container hero__inner">
         <div class="hero__content">
-          <h2 class="hero__name" data-cfg="agent.name">Radim Vrána</h2>
-          <h1 class="hero__title" id="hero-title" data-cfg="hero.title">Realitní makléř Ostrava</h1>
-          <div class="om-rating hero__rating" aria-label="Hodnocení 5 z 5">
-            <span class="om-stars" aria-hidden="true">★★★★★</span>
-            <span class="om-rating-text"><strong>5,0 / 5</strong> · hodnocení klientů</span>
+          <div class="hero__content-top">
+            <h2 class="hero__name" data-cfg="agent.name">Radim Vrána</h2>
+            <h1 class="hero__title" id="hero-title" data-cfg="hero.title">Realitní makléř Ostrava</h1>
+            <div class="om-rating hero__rating" aria-label="Hodnocení 5 z 5">
+              <span class="om-rating-text">5,0</span>
+              <span class="om-stars" aria-hidden="true">★★★★★</span>
+              <span class="om-rating-text">hodnocení klientů</span>
+            </div>
           </div>
-          <!-- Benefity místo podnadpisu (render z configu hero.reasons) -->
-          <ul class="hero__reasons" data-reasons>
-            <li>
-              <svg class="hero__reason-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-              <span>Profesionální prezentace</span>
-            </li>
-            <li>
-              <svg class="hero__reason-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-              <span>Reálné nacenění podle lokality a aktuální poptávky</span>
-            </li>
-            <li>
-              <svg class="hero__reason-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-              <span>Bezpečný obchod s právním servisem až do předání</span>
-            </li>
-          </ul>
 
+          <!-- Na mobilu se tento blok vizuálně přesouvá až pod fotku s vizitkou
+               (viz .hero__content-bottom v @media max-width:899px), na desktopu
+               zůstává v HTML pořadí beze změny. -->
+          <div class="hero__content-bottom">
+            <!-- Benefity místo podnadpisu (render z configu hero.reasons) -->
+            <ul class="hero__reasons" data-reasons>
+              <li>
+                <svg class="hero__reason-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                <span>Profesionální prezentace</span>
+              </li>
+              <li>
+                <svg class="hero__reason-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                <span>Reálné nacenění podle lokality a aktuální poptávky</span>
+              </li>
+              <li>
+                <svg class="hero__reason-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                <span>Bezpečný obchod s právním servisem až do předání</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Na mobilu se tlačítka vizuálně přesouvají až pod fotku s vizitkou
+               (viz .hero__cta v @media max-width:899px), na desktopu zůstávají
+               v HTML pořadí beze změny. -->
           <div class="hero__cta">
-            <a class="btn btn--primary btn--lg" href="#napiste" data-inquiry="Prodej nemovitosti" data-cfg="cta.secondary">
+            <a class="btn btn--primary btn--lg hero__cta-dark" href="#napiste" data-inquiry="Prodej nemovitosti" data-cfg="cta.secondary">
               Chci prodat nemovitost
             </a>
-            <a class="btn btn--outline btn--lg" href="#napiste" data-inquiry="Odhad ceny" data-cfg="cta.primary">
-              Zjistit cenu nemovitosti
+            <a class="btn btn--primary btn--lg" href="tel:+420722792287" data-cfg-href="agent.phoneTel">
+              Zavolat Radimovi
             </a>
           </div>
         </div>
@@ -280,6 +313,7 @@
             <a class="btn btn--primary btn--block" href="tel:+420722792287" data-cfg-href="agent.phoneTel">Zavolat Radimovi</a>
           </div>
         </aside>
+        </div>
       </div>
 
       <!-- Statistiky -->
@@ -363,10 +397,28 @@
       <div class="container">
         <div class="nabidka-card">
           <div class="nabidka-card__media">
-            <span class="nabidka-card__badge">Rezervováno</span>
-            <div class="nabidka-card__price-box">
-              <p class="nabidka-card__price">4 000 000 Kč</p>
-              <p class="nabidka-card__desc">Prodej bytu 2+kk 63 m² s balkónem a zahradou</p>
+            <!-- Tři samostatné fotky (ne jedna slepená koláž) — každá má vlastní
+                 object-position, takže se dá zaměření doladit nezávisle na sobě
+                 podle toho, jak vyjdou při ořezu na dané rozlišení. Badge a
+                 cena/název jsou uvnitř --main wrapperu, takže se drží jen nad
+                 hlavní fotkou ve všech třech layoutových režimech (mobil/
+                 tablet/desktop — viz CSS níže, tři samostatné @media bloky
+                 s pevnými breakpointy, žádné plynulé přepočítávání). -->
+            <div class="nabidka-card__photos">
+              <div class="nabidka-card__photo-wrap nabidka-card__photo-wrap--main">
+                <img class="nabidka-card__photo" src="assets/img/nabidka-koupelna.webp" alt="Koupelna" width="1019" height="1024" loading="lazy" decoding="async" />
+                <span class="nabidka-card__badge">Rezervováno</span>
+                <div class="nabidka-card__price-box">
+                  <p class="nabidka-card__price">4 000 000 Kč</p>
+                  <p class="nabidka-card__desc">Prodej bytu 2+kk 63 m² s balkónem a zahradou</p>
+                </div>
+              </div>
+              <div class="nabidka-card__photo-wrap nabidka-card__photo-wrap--top">
+                <img class="nabidka-card__photo" src="assets/img/nabidka-dum.webp" alt="Exteriér domu" width="510" height="509" loading="lazy" decoding="async" />
+              </div>
+              <div class="nabidka-card__photo-wrap nabidka-card__photo-wrap--bottom">
+                <img class="nabidka-card__photo" src="assets/img/nabidka-pokoj.webp" alt="Obytný pokoj" width="510" height="508" loading="lazy" decoding="async" />
+              </div>
             </div>
           </div>
           <div class="nabidka-card__content">
@@ -439,7 +491,7 @@
           <!-- Souhrnné hodnocení — hodnoty z configu (reviews.rating); skryje se, když není value -->
           <aside class="reviews-rating" data-rating aria-label="Souhrnné hodnocení klientů">
             <div class="reviews-rating__row reviews-rating__row--top">
-              <span class="reviews-rating__score"><span data-rating-value>5,0</span><span class="reviews-rating__out"> / <span data-rating-out>5</span></span></span>
+              <span class="reviews-rating__score"><span data-rating-value>5,0</span></span>
               <span class="reviews-rating__stars" aria-hidden="true">★★★★★</span>
             </div>
             <div class="reviews-rating__row reviews-rating__row--bottom">
@@ -473,8 +525,9 @@
           <span class="om-kicker">O MNĚ</span>
           <h2 class="section__title" id="o-mne-title"><span data-cfg="agent.name">Radim Vrána</span></h2>
           <div class="om-rating" aria-label="Hodnocení 5 z 5">
+            <span class="om-rating-text">5,0</span>
             <span class="om-stars" aria-hidden="true">★★★★★</span>
-            <span class="om-rating-text"><strong>5,0 / 5</strong> · hodnocení klientů</span>
+            <span class="om-rating-text">hodnocení klientů</span>
           </div>
           <p class="about__intro">Netvrdím, že jsem nejlepší makléř na trhu. Místo velkých slov raději nechávám mluvit práci, výsledky a spokojené klienty. Když mi svěříte svou nemovitost, beru to jako velkou zodpovědnost a udělám maximum pro to, aby prodej nebo pronájem proběhl co nejlépe.</p>
 
@@ -536,20 +589,20 @@
             </h3>
             <div class="faq__panel" id="faq-a-1" role="region" aria-labelledby="faq-q-1">
               <div class="faq__panel-inner">
-                <p>Odměna se vždy řeší podle typu nemovitosti a rozsahu služeb. Na první schůzce si řekneme, co přesně potřebujete, jaký postup dává smysl a jak bude odměna nastavená. Vše budete vědět předem.</p>
+                <p>Odměna se odvíjí od typu nemovitosti, její hodnoty a rozsahu poskytovaných služeb. Na první schůzce společně projdeme vaši situaci, navrhnu vhodný postup a vše včetně odměny si předem transparentně odsouhlasíme.</p>
               </div>
             </div>
           </div>
           <div class="faq__item">
             <h3 class="faq__item-head">
               <button class="faq__btn" type="button" aria-expanded="false" aria-controls="faq-a-2" id="faq-q-2">
-                <span class="faq__q">Jak dlouho trvá prodej nemovitosti?</span>
+                <span class="faq__q">Jak dlouho trvá prodej?</span>
                 <span class="faq__toggle" aria-hidden="true"></span>
               </button>
             </h3>
             <div class="faq__panel" id="faq-a-2" role="region" aria-labelledby="faq-q-2">
               <div class="faq__panel-inner">
-                <p>Záleží na typu nemovitosti, lokalitě, ceně a aktuální poptávce. U správně naceněné a dobře připravené nemovitosti může být zájem velmi rychlý. Důležité ale není jen prodat rychle, ale bezpečně a za rozumných podmínek.</p>
+                <p>Prodej nemovitosti obvykle trvá přibližně 1 až 3 měsíce. Konkrétní doba závisí především na správně nastavené ceně, typu nemovitosti, lokalitě a aktuální situaci na trhu.</p>
               </div>
             </div>
           </div>
@@ -569,13 +622,13 @@
           <div class="faq__item">
             <h3 class="faq__item-head">
               <button class="faq__btn" type="button" aria-expanded="false" aria-controls="faq-a-4" id="faq-q-4">
-                <span class="faq__q">Musím něco platit předem?</span>
+                <span class="faq__q">Platím něco předem?</span>
                 <span class="faq__toggle" aria-hidden="true"></span>
               </button>
             </h3>
             <div class="faq__panel" id="faq-a-4" role="region" aria-labelledby="faq-q-4">
               <div class="faq__panel-inner">
-                <p>To záleží na konkrétní domluvě a rozsahu služeb. Vše si řekneme předem, aby bylo jasné, co je součástí spolupráce a kdy se případně co hradí. Bez vašeho souhlasu se do ničeho nepouštíme.</p>
+                <p>Ne, předem nic neplatíte. Mou odměnu hradíte pouze v případě úspěšně dokončeného obchodu.</p>
               </div>
             </div>
           </div>
@@ -601,7 +654,7 @@
             </h3>
             <div class="faq__panel" id="faq-a-6" role="region" aria-labelledby="faq-q-6">
               <div class="faq__panel-inner">
-                <p>Ano, pokud je potřeba, umím pomoci i s návazností na financování. Díky tomu se dá lépe pohlídat, aby měl kupující reálnou možnost nemovitost doplatit a obchod zbytečně nestál.</p>
+                <p>Ano. Díky spolupráci s hypotečními specialisty dokážeme kupujícím pomoci se zajištěním financování. Prodávajícímu to přináší větší jistotu, že kupující hypotéku skutečně získá a celý obchod proběhne rychleji a bezpečněji.</p>
               </div>
             </div>
           </div>
@@ -633,14 +686,15 @@
 
             <div class="lead-card__content">
               <div class="lead-card__agent">
-                <img class="lead-card__photo" src="assets/img/radim-vrana.webp" data-cfg-src="agent.photo"
+                <img class="lead-card__photo" src="assets/img/radim-vrana-avatar.webp" data-cfg-src="agent.avatarPhoto"
                      alt="Radim Vrána" data-cfg-alt="agent.photoAlt" width="60" height="60" loading="lazy" decoding="async" />
                 <div>
                   <p class="lead-card__agent-name" data-cfg="agent.name">Radim Vrána</p>
                   <p class="lead-card__agent-role" data-cfg="agent.role">Realitní makléř Ostrava</p>
                   <p class="lead-card__rating">
+                    <span data-cfg="reviews.rating.value">5,0</span>
                     <span class="lead-card__stars" aria-hidden="true">★★★★★</span>
-                    <span data-cfg="reviews.rating.value">5,0</span> / <span data-cfg="reviews.rating.outOf">5</span> · <span data-cfg="reviews.rating.label">hodnocení klientů</span>
+                    <span data-cfg="reviews.rating.label">hodnocení klientů</span>
                   </p>
                 </div>
               </div>
@@ -719,7 +773,7 @@
               <div class="lead-form__row lead-form__row--check">
                 <input class="lead-form__checkbox" id="f-gdpr" name="gdpr" type="checkbox" required aria-required="true" />
                 <label class="lead-form__check-label" for="f-gdpr">
-                  Souhlasím se zpracováním osobních údajů za účelem vyřízení mé zprávy.
+                  Souhlasím se <a href="ochrana-osobnich-udaju.html" target="_blank" rel="noopener noreferrer">zpracováním osobních údajů</a> za účelem vyřízení mé zprávy.
                 </label>
                 <span class="lead-form__error" data-error-for="gdpr"></span>
               </div>
@@ -794,11 +848,18 @@
       </div>
 
       <!-- Pás mapy (Google embed, bez API klíče), full-bleed. Adresu změníš v src za query.
-           Plovoucí karty jsou zarovnané na šířku .container (calc), ne k okraji obrazovky. -->
-      <div class="kontakt-card__map">
-        <iframe class="kontakt-card__iframe" title="Mapa – kancelář MINT reality &amp; finance"
-                src="https://maps.google.com/maps?q=17.%20listopadu%20599%2F30%2C%20Ostrava-Poruba%2C%20708%2000&z=15&output=embed"
-                loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+           Plovoucí karty jsou zarovnané na šířku .container (calc), ne k okraji obrazovky.
+           Mapa se NEnačítá automaticky — Google embed nastavuje vlastní cookies bez ohledu
+           na naši cookie lištu, takže ji vážeme na souhlas s Analytickými cookies (main.js
+           initCookieConsent → applyConsent). Jakmile uživatel v cookie liště/nastavení
+           analytické cookies povolí, mapa se sama načte — bez dalšího klikání navíc. -->
+      <div class="kontakt-card__map" data-map-wrap
+           data-map-src="https://maps.google.com/maps?q=17.%20listopadu%20599%2F30%2C%20Ostrava-Poruba%2C%20708%2000&z=15&output=embed">
+        <div class="kontakt-card__map-placeholder" data-map-placeholder>
+          <svg class="kontakt-card__map-placeholder-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-7h6v7"/></svg>
+          <p class="kontakt-card__map-placeholder-text">Mapa je od Google a po zobrazení může nastavit vlastní cookies. Zobrazí se po povolení analytických cookies.</p>
+          <button type="button" class="btn btn--outline kontakt-card__map-placeholder-btn" data-cookie-settings-reopen>Nastavení cookies</button>
+        </div>
 
         <div class="kontakt-card__map-card">
           <p class="kontakt-card__map-card-head">Kancelář MINT reality &amp; finance</p>
@@ -840,8 +901,8 @@
       <div class="footer__col">
         <h2 class="footer__heading">Právní info</h2>
         <ul class="footer__links">
-          <li><a href="#">Ochrana osobních údajů</a></li>
-          <li><a href="#">Cookies</a></li>
+          <li><a href="ochrana-osobnich-udaju.html">Ochrana osobních údajů</a></li>
+          <li><a href="cookies.html">Cookies</a></li>
           <li><a href="#" data-cookie-settings-reopen>Nastavení cookies</a></li>
         </ul>
       </div>
@@ -891,7 +952,7 @@
       </div>
       <p class="cookie-consent__text">
         Používáme cookies pro správné fungování webu a analýzu návštěvnosti.
-        <a href="#" class="cookie-consent__link">Více informací</a>
+        <a href="cookies.html" class="cookie-consent__link">Více informací</a>
       </p>
     </div>
     <div class="cookie-consent__actions">

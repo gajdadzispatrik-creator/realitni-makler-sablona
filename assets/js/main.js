@@ -840,9 +840,29 @@
     function saveConsent(consent) {
       try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(consent)); } catch (e) {}
     }
+    // Mapa (Google embed) v Kontaktu — Google Maps nastavuje vlastní cookies,
+    // proto ji načítáme teprve když uživatel povolí Analytické cookies (stejná
+    // volba jako pro budoucí analytiku typu GA4), ne hned při vstupu na web.
+    var mapWrap = $("[data-map-wrap]");
+    var mapPlaceholder = mapWrap ? $("[data-map-placeholder]", mapWrap) : null;
+    function loadMap() {
+      if (!mapWrap || !mapPlaceholder) return;
+      var src = mapWrap.getAttribute("data-map-src");
+      if (!src) return;
+      var iframe = document.createElement("iframe");
+      iframe.className = "kontakt-card__iframe";
+      iframe.title = "Mapa – kancelář " + ((cfg.office && cfg.office.name) || "");
+      iframe.src = src;
+      iframe.loading = "lazy";
+      iframe.referrerPolicy = "no-referrer-when-downgrade";
+      mapWrap.insertBefore(iframe, mapPlaceholder);
+      mapPlaceholder.remove();
+    }
+
     function applyConsent(consent) {
       // Místo pro budoucí načtení analytiky (GA4 apod.) při consent.analytics === true.
       document.documentElement.setAttribute("data-analytics-consent", consent && consent.analytics ? "granted" : "denied");
+      if (consent && consent.analytics) loadMap();
     }
 
     // rAF-failsafe: na zaseklém/throttlovaném rendereru se requestAnimationFrame
