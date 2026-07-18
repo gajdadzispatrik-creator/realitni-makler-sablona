@@ -681,14 +681,16 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
      1cm (odsazení vršku) + 16px (padding-bottom .hero__inner) + 27px
      (polovina výšky .btn--lg, min-height 54px) = kolik se odečítá od 100 %. */
   .hero__bg-photo { background: url("../img/radim-vrana-cutout.webp") top 1cm center / auto calc(100% - 1cm - var(--space-4) - 27px) no-repeat; }
-  /* Ztmavení začíná cca od ramen (~40 % výšky kontejneru — hlava/obličej
-     zůstávají čisté, tmavne postupně dolů k tlačítkům). */
+  /* Ztmavení začíná cca od ramen (~35 % výšky kontejneru — hlava/obličej
+     zůstávají čisté) a je teď silnější/rychlejší — plně tmavé už od 50 %,
+     tedy přesně tam, kde díky margin-top:auto na .hero__content-top začíná
+     blok se jménem/hodnocením/benefity/tlačítky, aby byl bílý text čitelný. */
   .hero__bg-overlay {
     background: linear-gradient(180deg,
       rgba(13, 27, 36, .35) 0%,
       rgba(13, 27, 36, 0)   15%,
-      rgba(13, 27, 36, .15) 40%,
-      rgba(13, 27, 36, .92) 67%);
+      rgba(13, 27, 36, .25) 35%,
+      rgba(13, 27, 36, .94) 50%);
   }
 
   /* "Zavolat Radimovi" v hero__cta — na hoveru zůstává tyrkysová výplň,
