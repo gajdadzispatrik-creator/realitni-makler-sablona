@@ -1220,6 +1220,12 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   max-width: 100%;
   margin: 0 auto;
 }
+/* Vynucený zlom řádku jen na mobilu — na desktopu text běží na jednom
+   řádku přirozeně, <br> se tam neprojeví. */
+.sluzby-lead__break { display: none; }
+@media (max-width: 899px) {
+  .sluzby-lead__break { display: inline; }
+}
 
 .sluzby-grid {
   display: grid;
