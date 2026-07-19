@@ -535,17 +535,25 @@
       setError("name", name ? "" : "Vyplňte prosím jméno.");
       if (!name) ok = false;
 
-      // Stačí telefon NEBO e-mail — aspoň jedno z obou.
-      if (!phone && !email) {
-        setError("phone", "Vyplňte telefon nebo e-mail.");
-        setError("email", "");
+      // Telefon i e-mail jsou teď povinné oba.
+      if (!email) {
+        setError("email", "Vyplňte prosím e-mail.");
+        ok = false;
+      } else if (!validEmail(email)) {
+        setError("email", "Zadejte platný e-mail.");
         ok = false;
       } else {
-        var phoneBad = phone && !validPhone(phone);
-        var emailBad = email && !validEmail(email);
-        setError("phone", phoneBad ? "Zadejte platné telefonní číslo." : "");
-        setError("email", emailBad ? "Zadejte platný e-mail." : "");
-        if (phoneBad || emailBad) ok = false;
+        setError("email", "");
+      }
+
+      if (!phone) {
+        setError("phone", "Vyplňte prosím telefon.");
+        ok = false;
+      } else if (!validPhone(phone)) {
+        setError("phone", "Zadejte platné telefonní číslo.");
+        ok = false;
+      } else {
+        setError("phone", "");
       }
 
       setError("gdpr", gdpr ? "" : "Bez souhlasu nelze zprávu odeslat.");
@@ -554,10 +562,26 @@
       return ok;
     }
 
+    var generalError = $("[data-form-general-error]", form);
+    var submitBtn = $(".lead-form__submit", form);
+    var submitBtnLabel = submitBtn ? submitBtn.textContent : "";
+
     function showSuccess() {
       if (!success) return;
       form.hidden = true;
       success.hidden = false;
+    }
+
+    function showGeneralError(msg) {
+      if (!generalError) return;
+      generalError.textContent = msg;
+      generalError.hidden = !msg;
+    }
+
+    function setSubmitting(isSubmitting) {
+      if (!submitBtn) return;
+      submitBtn.disabled = isSubmitting;
+      submitBtn.textContent = isSubmitting ? "Odesílám…" : submitBtnLabel;
     }
 
     form.addEventListener("submit", function (e) {
@@ -569,23 +593,50 @@
         return;
       }
 
+      showGeneralError("");
+
       if (!validate()) {
         var firstInvalid = $('[aria-invalid="true"]', form);
         if (firstInvalid) firstInvalid.focus();
         return;
       }
 
-      // ----- MÍSTO PRO BUDOUCÍ NAPOJENÍ -----------------------------------
-      // var endpoint = form.getAttribute("data-endpoint");
-      // if (endpoint) {
-      //   fetch(endpoint, { method: "POST", body: new FormData(form) })
-      //     .then(...) — CRM / e-mail služba / serverless / webhook
-      // }
-      // Žádné API klíče ve frontendu!
-      // --------------------------------------------------------------------
+      var endpoint = form.getAttribute("data-endpoint");
+      if (!endpoint) {
+        showSuccess();
+        return;
+      }
 
-      showSuccess();
+      setSubmitting(true);
+      fetch(endpoint, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return { ok: res.ok }; });
+        })
+        .then(function (data) {
+          setSubmitting(false);
+          if (data && data.ok) {
+            showSuccess();
+          } else {
+            showGeneralError((data && data.message) || "Odeslání se nezdařilo, zkuste to prosím znovu.");
+          }
+        })
+        .catch(function () {
+          setSubmitting(false);
+          showGeneralError("Odeslání se nezdařilo — zkontrolujte prosím připojení a zkuste to znovu.");
+        });
     });
+
+    // Fallback bez JS: send-form.php po zpracování přesměruje zpět s ?sent=1/0.
+    var sentParam = new URLSearchParams(window.location.search).get("sent");
+    if (sentParam === "1") {
+      showSuccess();
+    } else if (sentParam === "0") {
+      showGeneralError("Odeslání se nezdařilo, zkuste to prosím znovu nebo nám rovnou zavolejte.");
+    }
 
     // Vyčisti chybu při psaní
     $all("input, textarea", form).forEach(function (el) {

@@ -2457,7 +2457,12 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
 .lead-card__form-wrap { padding: 40px 28px; background: var(--color-white); }
 
 .lead-form { display: grid; gap: var(--space-4); }
-.lead-form__row { display: grid; gap: var(--space-2); }
+/* align-content:start — bez toho by se label/input/chyba uvnitř řádku
+   roztažené na výšku sourozedního sloupce (viz .lead-form__grid) rozpočítaly
+   proporčně na všechny 3 vnitřní řádky, takže by input v kratším sloupci
+   (bez viditelné chyby) sedal jinde než v tom delším. Takhle se vždy
+   skládají odshora a přebývající místo zůstane dole, mimo cestu. */
+.lead-form__row { display: grid; align-content: start; gap: var(--space-2); }
 .lead-form__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
 .lead-form__label { font-weight: 600; font-size: var(--fs-sm); color: var(--color-text); }
 
@@ -2517,13 +2522,17 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
   outline-offset: 2px;
 }
 
-.lead-form__row--check { grid-template-columns: auto 1fr; align-items: start; gap: var(--space-3); }
-.lead-form__checkbox { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--color-primary-dark); }
-.lead-form__check-label { font-size: var(--fs-sm); color: var(--color-text-muted); }
+.lead-form__row--check { grid-template-columns: auto 1fr; align-items: center; gap: var(--space-3); }
+.lead-form__checkbox { width: 20px; height: 20px; margin-top: 0; accent-color: var(--color-primary-dark); }
+.lead-form__check-label { font-size: 12px; color: var(--color-text-muted); }
 .lead-form__row--check .lead-form__error { grid-column: 1 / -1; }
 
+/* min-height (ne display:none při prázdném stavu) — chybová hláška si musí
+   držet místo i prázdná, jinak se sloupce Telefon/E-mail (viz .lead-form__grid)
+   při zobrazení chyby jen u jednoho z nich vzájemně posunou. */
 .lead-form__error { color: #e5484d; font-size: var(--fs-sm); min-height: 1em; }
-.lead-form__error:empty { display: none; }
+.lead-form__error--general { margin: 0 0 var(--space-3); min-height: 0; }
+.lead-form__error--general:empty { margin: 0; }
 
 .lead-form__submit {
   width: 100%;

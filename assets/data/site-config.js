@@ -41,8 +41,8 @@ window.SITE_CONFIG = {
 
   /* --- Doména / brand ----------------------------------------------------- */
   brand: {
-    siteName: "Jan Novák — Realitní makléř",
-    domain: "https://www.vas-makler.cz", // bez koncového lomítka
+    siteName: "Radim Vrána — Realitní makléř",
+    domain: "https://www.radimvrana.cz", // bez koncového lomítka
   },
 
   /* --- CTA texty ---------------------------------------------------------- */
@@ -90,11 +90,11 @@ window.SITE_CONFIG = {
 
   /* --- SEO (referenční zdroj — synchronizuj s <head> v index.html) ------- */
   seo: {
-    title: "Realitní makléř Ostrava | Prodej bytu, domu a odhad ceny",
+    title: "Radim Vrána | Realitní makléř Ostrava",
     description:
-      "Pomohu vám s prodejem bytu, domu nebo pozemku v Ostravě. Odhad ceny, prezentace, prohlídky, právní servis a bezpečný průběh obchodu.",
-    canonical: "https://www.vas-makler.cz/",
-    ogImage: "assets/img/og-placeholder.svg", // doporučeno 1200×630
+      "Pomohu vám s prodejem i pronájmem nemovitosti v Ostravě. Zajistím přesné nacenění, profesionální prezentaci, moderní marketing i kompletní právní servis až do předání klíčů.",
+    canonical: "https://www.radimvrana.cz/",
+    ogImage: "assets/img/og-image.png", // 1200×630
   },
 
   /* --- Recenze ------------------------------------------------------------ */

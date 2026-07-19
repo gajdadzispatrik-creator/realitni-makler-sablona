@@ -9,34 +9,35 @@
        Tyto hodnoty musí být zde staticky (kvůli crawlerům). Zrcadli je
        s assets/data/site-config.js (sekce `seo` / `brand`).
        ====================================================================== -->
-  <title>Realitní makléř Ostrava | Prodej bytu, domu a odhad ceny</title>
-  <meta name="description" content="Pomohu vám s prodejem bytu, domu nebo pozemku v Ostravě. Odhad ceny, prezentace, prohlídky, právní servis a bezpečný průběh obchodu." />
-  <link rel="canonical" href="https://www.vas-makler.cz/" />
+  <title>Radim Vrána | Realitní makléř Ostrava</title>
+  <meta name="description" content="Pomohu vám s prodejem i pronájmem nemovitosti v Ostravě. Zajistím přesné nacenění, profesionální prezentaci, moderní marketing i kompletní právní servis až do předání klíčů." />
+  <link rel="canonical" href="https://www.radimvrana.cz/" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#1CC1DD" />
   <meta name="author" content="Radim Vrána" />
 
   <!-- Favicony / ikony (placeholdery — nahraď reálnými soubory) -->
-  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="assets/img/favicon.ico" sizes="any" />
+  <link rel="icon" href="assets/img/favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="icon" href="assets/img/favicon-16.png" type="image/png" sizes="16x16" />
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="cs_CZ" />
   <meta property="og:site_name" content="Radim Vrána — Realitní makléř" />
-  <meta property="og:title" content="Realitní makléř Ostrava | Prodej bytu, domu a odhad ceny" />
-  <meta property="og:description" content="Pomohu vám s prodejem bytu, domu nebo pozemku v Ostravě. Odhad ceny, prezentace, prohlídky, právní servis a bezpečný průběh obchodu." />
-  <meta property="og:url" content="https://www.vas-makler.cz/" />
-  <meta property="og:image" content="https://www.vas-makler.cz/assets/img/og-placeholder.svg" />
+  <meta property="og:title" content="Radim Vrána | Realitní makléř Ostrava" />
+  <meta property="og:description" content="Pomohu vám s prodejem i pronájmem nemovitosti v Ostravě. Zajistím přesné nacenění, profesionální prezentaci, moderní marketing i kompletní právní servis až do předání klíčů." />
+  <meta property="og:url" content="https://www.radimvrana.cz/" />
+  <meta property="og:image" content="https://www.radimvrana.cz/assets/img/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Realitní makléř Ostrava | Prodej bytu, domu a odhad ceny" />
-  <meta name="twitter:description" content="Pomohu vám s prodejem bytu, domu nebo pozemku v Ostravě. Odhad ceny, prezentace, prohlídky, právní servis a bezpečný průběh obchodu." />
-  <meta name="twitter:image" content="https://www.vas-makler.cz/assets/img/og-placeholder.svg" />
+  <meta name="twitter:title" content="Radim Vrána | Realitní makléř Ostrava" />
+  <meta name="twitter:description" content="Pomohu vám s prodejem i pronájmem nemovitosti v Ostravě. Zajistím přesné nacenění, profesionální prezentaci, moderní marketing i kompletní právní servis až do předání klíčů." />
+  <meta name="twitter:image" content="https://www.radimvrana.cz/assets/img/og-image.png" />
 
   <!-- =========================================================================
        JSON-LD — strukturovaná data pro realitního makléře.
@@ -55,8 +56,8 @@
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
     "name": "Radim Vrána — Realitní makléř",
-    "image": "https://www.vas-makler.cz/assets/img/agent-placeholder.svg",
-    "url": "https://www.vas-makler.cz/",
+    "image": "https://www.radimvrana.cz/assets/img/radim-vrana-avatar.webp",
+    "url": "https://www.radimvrana.cz/",
     "telephone": "+420722792287",
     "email": "radim@mintreality.cz",
     "priceRange": "$$",
@@ -721,7 +722,7 @@
 
           <div class="lead-card__form-wrap">
             <!-- Formulář — bez backendu; main.js dělá základní validaci + honeypot -->
-            <form class="lead-form" id="contact-form" novalidate data-endpoint="" method="post" action="">
+            <form class="lead-form" id="contact-form" novalidate data-endpoint="send-form.php" method="post" action="send-form.php">
               <div class="lead-form__row">
                 <label class="lead-form__label" id="f-sluzba-label">S čím vám můžu pomoci?</label>
                 <div class="lead-form__tiles" role="radiogroup" aria-labelledby="f-sluzba-label">
@@ -750,13 +751,15 @@
                 <div class="lead-form__row">
                   <label class="lead-form__label" for="f-phone">Telefon</label>
                   <input class="lead-form__input" id="f-phone" name="phone" type="tel"
-                         autocomplete="tel" inputmode="tel" placeholder="Pro rychlé spojení" />
+                         autocomplete="tel" inputmode="tel" placeholder="Pro rychlé spojení"
+                         required aria-required="true" />
                   <span class="lead-form__error" data-error-for="phone"></span>
                 </div>
                 <div class="lead-form__row">
                   <label class="lead-form__label" for="f-email">E-mail</label>
                   <input class="lead-form__input" id="f-email" name="email" type="email"
-                         autocomplete="email" inputmode="email" placeholder="Pro odpověď" />
+                         autocomplete="email" inputmode="email" placeholder="Pro odpověď"
+                         required aria-required="true" />
                   <span class="lead-form__error" data-error-for="email"></span>
                 </div>
               </div>
@@ -781,6 +784,7 @@
                 <span class="lead-form__error" data-error-for="gdpr"></span>
               </div>
 
+              <p class="lead-form__error lead-form__error--general" data-form-general-error role="alert" hidden></p>
               <button class="lead-form__submit" type="submit">Odeslat zprávu</button>
               <p class="lead-form__note">Odpovídám obvykle do 24 hodin · nezávazně</p>
             </form>
