@@ -183,8 +183,22 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
 /* Služby — bílé pozadí, mřížka 3 karet. */
 #sluzby { padding-top: clamp(2rem, 1.5rem + 3vw, 4.5rem); padding-bottom: clamp(3rem, 2rem + 4vw, 5.5rem); position: relative; }
 /* Tyrkysové: Recenze + FAQ. O mně je bílý pruh mezi nimi (šikmé předěly). */
-#reference { background: var(--color-primary); position: relative; padding-top: clamp(3.5rem, 2.5rem + 4vw, 6rem); }
+#reference {
+  background: var(--color-primary);
+  position: relative;
+  padding-top: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+  /* +angle-h navíc dole, aby šikmý ořez (viz níž) nikdy neusekl obsah v levém rohu. */
+  padding-bottom: calc(var(--section-y) + var(--divider-h));
+  --angle-h: var(--divider-h);
+}
 #reference .container { max-width: 1200px; padding-inline: 56px; }
+/* Šikmý spodní okraj — stejná technika jako FAQ (blok 11): sekce se ořízne
+   sama přes clip-path, ne přes samostatný klín nad další sekcí (ten měl na
+   širokých/mělkých poměrech vizuální artefakt — vlevo vypadal rovně místo
+   šikmo). Levá strana výše (víc oříznuto), pravá níže (beze změny). */
+#reference {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--angle-h)));
+}
 
 /* Marquee — tmavý pruh s kroky procesu prodeje, mezi Službami a Recenzemi.
    Normální blok (ne overlay), plné šířky diky poloze přímo pod <main>. */
@@ -235,25 +249,12 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   .marq-step { font-size: 16px; }
   .marquee { padding: 22px 0; }
 }
-#o-mne { background: var(--color-white); --angle-h: var(--divider-h); }
+/* margin-top: -1px překryje sub-pixel seam mezi sekcemi (jinak tam občas prosvítá bílá linka). */
+#o-mne { background: var(--color-white); margin-top: -1px; }
 /* FAQ je tyrkysová sekce se šikmým okrajem nahoře i dole — sama sebe ořízne
-   přes clip-path (viz blok 11), stejně jako Kontakt. Žádný extra wedge netřeba. */
-
-/* Šikmé oddělení sekce O mně: levá strana výše, pravá níže.
-   Oba předěly leží na úhlopříčce roh→roh boxu o výšce --angle-h,
-   takže drží stejný sklon napříč šířkami obrazovky. */
-/* Horní předěl: tyrkysový klín navazující na modré Recenze nad sekcí.
-   top: -2px překryje sub-pixel seam mezi sekcemi (jinak tam prosvítá bílá linka). */
-#o-mne::after {
-  content: "";
-  position: absolute;
-  top: -2px; left: 0; right: 0;
-  height: calc(var(--angle-h) + 2px);
-  background: var(--color-primary);
-  clip-path: polygon(0 0, 100% 0, 100% 100%);
-  z-index: 0;
-  pointer-events: none;
-}
+   přes clip-path (viz blok 11), stejně jako Kontakt. Šikmý přechod Recenze → O mně
+   funguje stejně: klín je součástí #reference (viz blok výš), ne samostatný
+   překryv nad O mně. */
 /* Bílý text na tyrkysové sekci Recenze. */
 #reference .section__title { color: var(--color-white); }
 #reference .section__lead { color: var(--color-white); }
