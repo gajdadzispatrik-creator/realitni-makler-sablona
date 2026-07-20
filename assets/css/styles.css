@@ -551,22 +551,24 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
      1cm minimum (viz @media min-width:900px) platí jen pro desktop. */
   padding-top: calc(var(--header-h) + env(safe-area-inset-top) + clamp(1.5rem, 0.8rem + 3vw, 3rem));
   padding-bottom: var(--space-8);
-  /* Fotka v pozadí + světlé overlaye pro čitelnost textu.
-     Vrstvy (odshora): overlay zleva, overlay nahoře+dole, FOTKA (hero-bg.png). */
+  /* Fotka v pozadí + overlaye pro čitelnost textu — stejné barvy jako
+     mobilní pozadí (.hero__bg-base #3aa9c4→#1b6c80 + .hero__bg-overlay
+     rgba(13,27,36,...)), jen aplikované na stávající desktopové vrstvy
+     (stejná struktura/stopy gradientů, jen jiné barvy). */
   background-color: var(--color-bg);
   background-image:
     linear-gradient(98deg,
-      rgba(255, 255, 255, 0.94) 0%,
-      rgba(255, 255, 255, 0.82) 30%,
-      rgba(255, 255, 255, 0.52) 48%,
-      rgba(255, 255, 255, 0.16) 66%,
-      rgba(255, 255, 255, 0) 80%),
+      rgba(13, 27, 36, 0.77) 0%,
+      rgba(13, 27, 36, 0.66) 30%,
+      rgba(13, 27, 36, 0.42) 48%,
+      rgba(13, 27, 36, 0.13) 66%,
+      rgba(13, 27, 36, 0) 80%),
     linear-gradient(180deg,
-      rgba(255, 255, 255, 0.9) 0%,
-      rgba(255, 255, 255, 0) 22%,
-      rgba(255, 255, 255, 0) 42%,
-      #ffffff 68%,
-      #ffffff 100%),
+      rgba(58, 169, 196, 0.9) 0%,
+      rgba(58, 169, 196, 0) 22%,
+      rgba(27, 108, 128, 0) 42%,
+      #1b6c80 68%,
+      #1b6c80 100%),
     url("../img/hero-bg.webp");
   background-repeat: no-repeat;
   background-position: center, center, center;
@@ -861,7 +863,7 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   font-size: 0.98rem;
   color: var(--color-text);
 }
-.hero__reason-ic { width: 20px; height: 20px; margin-top: 2px; margin-left: -3px; color: var(--color-primary-darker); flex: none; }
+.hero__reason-ic { width: 20px; height: 20px; margin-top: 2px; margin-left: -3px; color: var(--color-primary); flex: none; }
 @media (max-width: 560px) {
   /* Každý benefit vždy na jednom řádku — text se místo zalomení radši zmenší
      (vw-fluidní clamp), aby se vešel i na nejužší telefony (320px). */
@@ -2890,27 +2892,70 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
 @media (min-width: 900px) and (orientation: landscape) {
   /* 1cm minimum nad fotkou makléře i pod kartou "Zavolat Radimovi" — jen na desktopu. */
   .hero { padding-top: calc(var(--header-h) + env(safe-area-inset-top) + max(1cm, clamp(1.5rem, 0.8rem + 3vw, 3rem))); }
-  .stats { margin-top: max(1cm, var(--space-7)); }
-  .hero__inner { grid-template-columns: 1.15fr 0.85fr; gap: var(--space-9); }
+  .stats { margin-top: 0; }
+  /* flex:1 — .hero__inner vyplní celou výšku .hero__visual (místo aby ho
+     .hero__visual svisle centroval jako menší box). .hero__inner je
+     position:relative (viz base pravidlo), takže z něj jde přes absolutní
+     pozicování udělat spolehlivý "fill" pro kartu — bez spoléhání na to,
+     jak přesně prohlížeč stretchuje grid řádek/flex položku (to se ukázalo
+     nespolehlivé mezi headless testem a reálným Chrome). */
+  .hero__inner { grid-template-columns: 1.15fr 0.85fr; gap: var(--space-9); flex: 1 1 auto; }
+  /* H2 (jméno), hodnocení klientů a benefity bílou barvou — stejně jako na
+     mobilu, teď když desktopové pozadí používá stejný tmavý přeliv.
+     Hvězdičky (.om-stars) zůstávají zlaté beze změny. */
+  .hero__inner .hero__name,
+  .hero__inner .om-rating-text,
+  .hero__inner .hero__reasons li { color: #fff; }
   /* Textový sloupec posunutý o 1cm doprava oproti statistikám pod ním
      (ty začínají na okraji containeru beze změny). */
   .hero__content { margin-left: 1cm; }
   .hero__cta .btn { flex: 0 1 auto; }
-  /* justify-self:end → margin-right doplní containerový padding do zaručeného 1cm.
-     align-self:start — karta se drží nahoře (hned pod garantovanou 1cm mezerou),
-     místo aby ji svislé centrování v rámci (vyššího) řádku tlačilo níž. */
-  .hero__card { max-width: 400px; justify-self: end; align-self: start; margin-right: max(0px, 1cm - var(--container-pad)); }
-  /* Výšku fotky vážeme na výšku obrazovky → hero se vejde i na nízké notebooky.
-     Horní hranice navíc zaručuje aspoň 1cm místa nad hlavou (foto + vizitka
-     jako jeden celek) — pokud by se nevešly, proporčně se zmenší. Transform
-     scale(1.12) byl odstraněný, protože roztahoval kartu vizuálně nad její
-     layoutovou pozici (kolem svého středu) a ukusoval z té garantované mezery. */
-  .hero__photo-wrap {
-    aspect-ratio: auto;
-    height: clamp(340px, 46svh, min(500px, calc(100svh - var(--header-h) - env(safe-area-inset-top) - 1cm - var(--space-8))));
+  /* "Zavolat Radimovi" (desktop) — na hoveru zůstává tyrkysová výplň, mění
+     se jen text na tmavý (stejné chování jako mobilní varianta výš). */
+  .hero__cta a.btn--primary:not(.hero__cta-dark):hover {
+    --btn-bg: var(--color-primary);
+    --btn-fg: var(--color-text);
+    color: var(--color-text);
   }
-  /* vizitka mírně přesahuje vlevo přes okraj fotky → vrstvení */
-  .hero__contact { margin-inline: calc(-1 * var(--space-7)) var(--space-5); }
+  /* Karta (fotka + vizitka) je vyjmutá z gridu a napozicovaná absolutně
+     přes top:0/bottom:0 — spolehlivě vyplní přesně výšku .hero__inner
+     (viz komentář výš), spodek tak vždy sahá až k tyrkysovému pruhu
+     statistik pod ní. right = stejný 1cm odsazení jako předtím přes
+     justify-self:end + margin-right. */
+  .hero__card {
+    position: absolute;
+    /* bottom:0 = SPODNÍ referenční bod, beze změny (vůči .hero__inner, který
+       sahá až k tyrkysovému pruhu statistik). top:0 taky beze změny — jen
+       určuje horní STROP (.hero__inner už sám začíná pod hlavičkou +
+       gap z .hero padding-top). Nic z tohohle se v této úpravě nemění. */
+    top: 0;
+    bottom: 0;
+    /* 1cm MEZERA od pravého konce baru (ne zarovnání s ním) — bar sám
+       končí v containeru na var(--container-pad), takže + 1cm navíc. */
+    right: calc(var(--container-pad) + 1cm);
+    width: auto;
+    /* 680px kolidovalo s textem na 1920×1080 (foto by bylo 612px široké) —
+       590px je bezpečná horní hranice, ověřená proti celé testovací matici. */
+    max-width: 590px;
+  }
+  /* height:100% karty (ta je definovaná přes top:0/bottom:0 = pevný spodek
+     i strop) a width:auto — na <img> (replaced element) se width:auto
+     dopočítá ze skutečného poměru stran zdrojového souboru nativně
+     prohlížečem, spolehlivěji napříč prohlížeči než CSS aspect-ratio na
+     obalovém divu. */
+  .hero__photo-wrap { height: 100%; width: auto; min-height: 340px; }
+  .hero__photo {
+    display: block;
+    height: 100%;
+    width: auto;
+    max-width: none;
+    object-fit: contain;
+    object-position: bottom center;
+  }
+  /* Celá vizitka (jméno, telefon, tlačítko, bílý panel) na desktopu pryč —
+     zůstává jen fotka, ta teď (flex:1 na .hero__photo-wrap výš) vyplní
+     celou kartu sama a sahá až k tyrkysovému pruhu statistik. */
+  .hero__contact { display: none; }
 }
 @media (min-width: 900px) {
   .about {
@@ -2950,8 +2995,8 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
   .hero__subtitle { margin-top: var(--space-3); }
   .hero__cta { margin-top: var(--space-5); }
   .hero__reasons { margin-top: var(--space-4); padding-top: var(--space-4); gap: var(--space-2); }
-  .hero__photo-wrap { height: clamp(280px, 40svh, min(420px, calc(100svh - var(--header-h) - env(safe-area-inset-top) - 1cm - var(--space-8)))); }
-  .stats { margin-top: max(1cm, var(--space-5)); padding-block: var(--space-4); }
+  .hero__photo-wrap { min-height: 280px; }
+  .stats { margin-top: 0; padding-block: var(--space-4); }
   /* Předtím klesalo číslo (1.6rem/25.6px max) skoro na úroveň popisku
      (--fs-sm, 14px, fixní) — číslo muselo zůstat výrazně větší. */
   .stat__value { font-size: clamp(1.7rem, 1.2rem + 2vw, 2.5rem); }
