@@ -23,7 +23,7 @@ function respond($ok, $message, $isAjax) {
         exit;
     }
     // Fallback bez JS — vrať uživatele zpět na formulář s příznakem ve URL.
-    $target = $ok ? 'index.html?sent=1#napiste' : 'index.html?sent=0#napiste';
+    $target = $ok ? '/?sent=1#napiste' : '/?sent=0#napiste';
     header('Location: ' . $target);
     exit;
 }
