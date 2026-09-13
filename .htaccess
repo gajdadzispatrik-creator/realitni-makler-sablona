@@ -1,6 +1,12 @@
 # Vynutit HTTPS a www (musí sedět s canonical adresou https://www.radimvrana.cz/)
 RewriteEngine On
 
+# Wedos hostuje víc domén pod /www/domains/<doména>/ a tahle reálná cesta na
+# disku je dostupná i přímo jako URL (interní alias na hlavní doménu ji
+# nezablokuje) — přesměruj ji na čistou adresu, ať existuje jen jeden odkaz.
+RewriteCond %{THE_REQUEST} /domains/radimvrana\.cz/ [NC]
+RewriteRule ^(.*)$ https://www.radimvrana.cz/$1 [R=301,L]
+
 RewriteCond %{HTTPS} off [OR]
 RewriteCond %{HTTP_HOST} !^www\. [NC]
 RewriteCond %{HTTPS} off
