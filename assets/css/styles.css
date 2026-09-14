@@ -1681,7 +1681,17 @@ h1, h2, h3, p, a, li, td { overflow-wrap: break-word; }
   box-shadow: 0 4px 12px rgba(4, 48, 58, .14);
 }
 .review__stars { color: #FBBC04; letter-spacing: 2px; font-size: 1.05rem; }
-.review__text { color: var(--color-text); }
+/* Karty v carouselu mají align-items:stretch (viz .reviews__track), takže
+   jedna hodně dlouhá recenze natáhne výšku úplně všech karet v řadě.
+   Oříznutí na pevný počet řádků drží výšku karet konzistentní bez ohledu
+   na to, jak dlouhý text konkrétní recenze má. */
+.review__text {
+  color: var(--color-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .review__meta {
   margin-top: auto;
   display: flex;
