@@ -851,10 +851,12 @@
 
     items.forEach(function (item) {
       var btn = $(".faq__btn", item);
-      var panel = $(".faq__panel", item);
-      if (item.classList.contains("is-open")) {
-        panel.style.maxHeight = reduce ? "none" : panel.scrollHeight + "px";
-      }
+      // Statické max-height: none pro výchozí otevřenou položku už řeší CSS
+      // (.faq__item.is-open .faq__panel) — sem se nesahá. Dřívější JS přepis
+      // na fixní panel.scrollHeight + "px" tady byl zbytečný a navíc chybový:
+      // měřil výšku panelu dřív, než se dotáhne webfont (font-display: swap),
+      // takže se text po přeskoku písma zalomil jinak a spodní odsazení se
+      // takhle "uřízlo" fixní výškou z prvního (užšího) měření.
       btn.addEventListener("click", function () {
         if (item.classList.contains("is-open")) {
           closeItem(item);
