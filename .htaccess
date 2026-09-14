@@ -7,14 +7,17 @@ RewriteEngine On
 RewriteCond %{THE_REQUEST} /domains/radimvrana\.cz/ [NC]
 RewriteRule ^(.*)$ https://www.radimvrana.cz/$1 [R=301,L]
 
+# Kanonická adresa vždy https://www.radimvrana.cz/<cesta> — cíl se skládá
+# z THE_REQUEST (originální požadavek klienta), NE z HTTP_HOST/REQUEST_URI.
+# Ty uvnitř tohoto /domains/<doména>/.htaccess kontextu odrážejí interní
+# přepis provedený kořenovým /www/.htaccess (Wedos multi-doménový routing),
+# takže by naivní "https://www.%{HTTP_HOST}%{REQUEST_URI}" zdvojilo "www."
+# a prosáklo by do výsledné URL i interní segment "/domains/…" — ověřeno
+# živě (http://www.radimvrana.cz/ mířilo na .../domains/radimvrana.cz/).
 RewriteCond %{HTTPS} off [OR]
 RewriteCond %{HTTP_HOST} !^www\. [NC]
-RewriteCond %{HTTPS} off
-RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-RewriteCond %{HTTPS} on
-RewriteCond %{HTTP_HOST} !^www\. [NC]
-RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\s/+(\S*) [NC]
+RewriteRule ^ https://www.radimvrana.cz/%1 [R=301,L]
 
 # Čisté adresy bez ".html" — kdo zadá/naklikne ".html" v URL, přesměruje se
 # (301) na verzi bez přípony; interně se pak stránka dopočítá zpátky na
