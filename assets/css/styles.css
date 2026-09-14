@@ -2560,8 +2560,9 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
   gap: 0.4em;
   transition: background var(--transition), box-shadow var(--transition);
 }
-/* color explicitně i v hoveru — jinak obecné "a:hover"/dědičné pravidlo může přebít bílou. */
-.lead-form__submit:hover { background: var(--color-text); color: var(--color-white); }
+/* color explicitně i v hoveru — jinak obecné "a:hover"/dědičné pravidlo může přebít bílou.
+   box-shadow taky přebarvit — jinak zůstane tyrkysová záře i pod tmavým pozadím. */
+.lead-form__submit:hover { background: var(--color-text); color: var(--color-white); box-shadow: 0 12px 28px rgba(16, 32, 39, .4); }
 .lead-form__submit:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 
 .lead-form__note { margin: -4px 0 0; text-align: center; color: #8a97a0; font-size: 12px; }
