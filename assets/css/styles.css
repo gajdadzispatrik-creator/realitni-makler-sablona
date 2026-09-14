@@ -2261,7 +2261,7 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
 .kontakt-card__map-card {
   position: absolute;
   z-index: 2;
-  left: var(--kontakt-map-inset);
+  right: var(--kontakt-map-inset);
   top: 26px;
   max-width: 280px;
   background: var(--color-white);
@@ -2317,7 +2317,7 @@ a.kontakt-card__tile-value:hover { color: rgba(255, 255, 255, .85); }
   /* Tablety na výšku mají dost místa na dva kontakty na řádek místo jednoho. */
   .kontakt-card__tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .kontakt-card__map { height: 220px; }
-  .kontakt-card__map-card { left: 16px; top: 16px; max-width: 170px; padding: 10px 14px; }
+  .kontakt-card__map-card { right: 16px; top: 16px; max-width: 170px; padding: 10px 14px; }
   .kontakt-card__map-card-head { font-size: 11px; white-space: normal; }
   .kontakt-card__map-card-line1 { font-size: 13.5px; }
   .kontakt-card__map-card-line2 { font-size: 11.5px; }
