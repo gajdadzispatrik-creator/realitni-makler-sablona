@@ -787,6 +787,9 @@
     function expand() {
       btn.setAttribute("aria-expanded", "true");
       if (label) label.textContent = "Skrýt příběh";
+      // Kotva: po rozbalení jede zobrazit rovnou pokračování textu (na desktopu
+      // je #about-story samostatný řádek pod fotkou/hlavičkou, mimo viewport).
+      story.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
       if (reduce) { story.style.height = "auto"; return; }
       story.style.height = story.scrollHeight + "px";
       var done = function (e) {
